@@ -4,252 +4,905 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Torquehub.pl SMP</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#0a0a0a;
-    --card-bg:#111111;
-    --card-hover:#161616;
-    --primary:#ea40ed;
-    --accent:#ffffff;
-    --border:rgba(255,255,255,.08);
-    --border-strong:rgba(255,255,255,.16);
-    --text-dim:#9ca3af;
-    --text-faint:#6b7280;
-    --discord:#5865F2;
-    --disp:"Oxanium",sans-serif;
-    --body:"Inter",sans-serif;
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--accent);
-    font-family:var(--body);
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    position:relative;
-  }
-  a{color:inherit;text-decoration:none;}
-  ul,ol{list-style:none;}
-  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+:root{
+  --bg:#0a0a0a;
+  --card-bg:#111111;
+  --card-hover:#161616;
+  --primary:#ea40ed;
+  --accent:#ffffff;
+  --border:rgba(255,255,255,.08);
+  --border-strong:rgba(255,255,255,.16);
+  --text-dim:#9ca3af;
+  --text-faint:#6b7280;
+  --discord:#5865F2;
+  --disp:"Oxanium",sans-serif;
+  --body:"Inter",sans-serif;
+}
 
-  /* ---------- AMBIENT BACKGROUND ---------- */
-  .bg-fx{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-  .bg-base{position:absolute;inset:0;background:#0a0a0a;}
-  .bg-grid{
-    position:absolute;inset:0;opacity:.35;
-    background-image:linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size:56px 56px;
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
-    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
-  }
-  .blob{position:absolute;border-radius:50%;filter:blur(48px);}
-  .blob1{top:-160px;left:50%;transform:translateX(-50%);width:1100px;height:600px;background:radial-gradient(closest-side, rgba(234,64,237,.16), transparent 70%);}
-  .blob2{top:25%;left:-160px;width:420px;height:420px;background:radial-gradient(closest-side, rgba(88,101,242,.12), transparent 70%);}
-  .blob3{top:55%;right:-130px;width:460px;height:460px;background:radial-gradient(closest-side, rgba(100,120,160,.1), transparent 70%);}
-  .noise{position:absolute;inset:0;width:100%;height:100%;opacity:.025;mix-blend-mode:overlay;}
+*,*::before,*::after{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;}
-  .content{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;}
+html{
+  scroll-behavior:smooth;
+}
 
-  h1,h2,h3{font-family:var(--disp);font-weight:800;letter-spacing:.01em;}
-  p{color:var(--text-dim);}
+body{
+  background:var(--bg);
+  color:var(--accent);
+  font-family:var(--body);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  position:relative;
+}
 
-  /* ---------- NAV ---------- */
-  nav.top{position:sticky;top:0;z-index:50;}
-  .nav-bar{border-bottom:1px solid var(--border);backdrop-filter:blur(16px);background:rgba(10,10,10,.7);}
-  .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
-  .logo{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:.02em;text-transform:uppercase;color:var(--accent);}
-  .nav-links{display:flex;align-items:center;gap:4px;}
-  .nav-links a{
-    position:relative;display:flex;align-items:center;gap:5px;
-    padding:8px 14px;font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
-    color:#d1d5db;transition:color .15s;
-  }
-  .nav-links a:hover, .nav-links a.active{color:#fff;}
-  .nav-links a .u{position:absolute;left:14px;right:14px;bottom:5px;height:2px;border-radius:99px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform .2s;}
-  .nav-links a:hover .u, .nav-links a.active .u{transform:scaleX(1);}
-  .nav-links a svg{width:11px;height:11px;opacity:.5;}
-  .nav-right{display:flex;align-items:center;gap:10px;}
-  .status-pill{display:none;align-items:center;gap:7px;padding:6px 12px;border:1px solid var(--border);border-radius:99px;font-family:"Space Mono",monospace;font-size:12px;color:#d1d5db;}
-  .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;}
-  @media (min-width:640px){.status-pill{display:inline-flex;}}
-  .burger{display:none;width:36px;height:36px;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:2px;background:rgba(255,255,255,.03);}
-  .burger svg{width:18px;height:18px;color:#d1d5db;}
-  #mobileNav{display:none;border-top:1px solid var(--border);background:rgba(10,10,10,.92);}
-  #mobileNav a{display:block;padding:14px 24px;font-size:14px;font-weight:700;text-transform:uppercase;color:#d1d5db;}
+a{
+  color:inherit;
+  text-decoration:none;
+}
 
-  main{flex:1;width:100%;max-width:1140px;margin:0 auto;padding:0 24px 40px;}
-  .page{display:none;}
-  .page.active{display:block;animation:fade .3s ease;}
-  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+ul,ol{
+  list-style:none;
+}
 
-  /* ================= HOME / LANDING ================= */
-  .land-hero{position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);margin:24px 0 44px;}
-  .land-hero-bg{position:absolute;inset:0;
-    background:
-      radial-gradient(ellipse 65% 90% at 88% 10%, rgba(234,64,237,.18), transparent 60%),
-      radial-gradient(ellipse 55% 60% at 5% 95%, rgba(88,101,242,.12), transparent 65%),
-      linear-gradient(135deg,#0d0d0f 0%,#141014 55%,#0a0a0a 100%);
+button{
+  font:inherit;
+  cursor:pointer;
+  border:none;
+  background:none;
+  color:inherit;
+}
+
+/* ================= BACKGROUND ================= */
+
+.bg-fx{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.bg-base{
+  position:absolute;
+  inset:0;
+  background:#0a0a0a;
+}
+
+.bg-grid{
+  position:absolute;
+  inset:0;
+  opacity:.35;
+  background-image:
+    linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    black 30%,
+    transparent 75%
+  );
+  -webkit-mask-image:radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    black 30%,
+    transparent 75%
+  );
+}
+
+.blob{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(48px);
+}
+
+.blob1{
+  top:-160px;
+  left:50%;
+  transform:translateX(-50%);
+  width:1100px;
+  height:600px;
+  background:radial-gradient(
+    closest-side,
+    rgba(234,64,237,.16),
+    transparent 70%
+  );
+}
+
+.blob2{
+  top:25%;
+  left:-160px;
+  width:420px;
+  height:420px;
+  background:radial-gradient(
+    closest-side,
+    rgba(88,101,242,.12),
+    transparent 70%
+  );
+}
+
+.blob3{
+  top:55%;
+  right:-130px;
+  width:460px;
+  height:460px;
+  background:radial-gradient(
+    closest-side,
+    rgba(100,120,160,.1),
+    transparent 70%
+  );
+}
+
+.noise{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:.025;
+  mix-blend-mode:overlay;
+}
+
+.wrap{
+  max-width:1140px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+.content{
+  position:relative;
+  z-index:1;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+h1,h2,h3{
+  font-family:var(--disp);
+  font-weight:800;
+  letter-spacing:.01em;
+}
+
+p{
+  color:var(--text-dim);
+}
+
+/* ================= NAV ================= */
+
+nav.top{
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.nav-bar{
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  background:rgba(10,10,10,.7);
+}
+
+.nav-inner{
+  max-width:1140px;
+  margin:0 auto;
+  padding:0 24px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-family:var(--disp);
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.nav-links a{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:8px 14px;
+  font-size:13.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  color:#d1d5db;
+  transition:color .15s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:#fff;
+}
+
+.nav-links a .u{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:5px;
+  height:2px;
+  border-radius:99px;
+  background:var(--primary);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .2s;
+}
+
+.nav-links a:hover .u,
+.nav-links a.active .u{
+  transform:scaleX(1);
+}
+
+.nav-links a svg{
+  width:11px;
+  height:11px;
+  opacity:.5;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.status-pill{
+  display:none;
+  align-items:center;
+  gap:7px;
+  padding:6px 12px;
+  border:1px solid var(--border);
+  border-radius:99px;
+  font-family:"Space Mono",monospace;
+  font-size:12px;
+  color:#d1d5db;
+}
+
+.status-pill .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 6px #22c55e;
+}
+
+@media (min-width:640px){
+  .status-pill{
+    display:inline-flex;
   }
-  .land-voxel{position:absolute;right:6%;top:50%;transform:translateY(-50%);width:min(240px,30vw);aspect-ratio:1;
-    display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:2px;
-    filter:drop-shadow(0 18px 30px rgba(0,0,0,.55));opacity:.95;animation:floaty 5s ease-in-out infinite;}
-  .land-voxel i{display:block;border-radius:1px;}
-  @keyframes floaty{0%,100%{transform:translateY(-50%);}50%{transform:translateY(calc(-50% - 12px));}}
-  .land-hero-inner{position:relative;padding:56px 36px;display:flex;flex-direction:column;gap:22px;}
-  .kicker{display:inline-flex;align-items:center;gap:10px;font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);}
-  .kicker::before{content:"";width:20px;height:1px;background:var(--primary);}
-  .land-hero-inner h1{font-size:clamp(30px,5vw,52px);color:#fff;max-width:14ch;line-height:1.06;}
-  .land-hero-inner .lead{margin-top:2px;max-width:48ch;font-size:15.5px;color:#d1d5db;}
-  .land-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
-  .chip{
-    display:inline-flex;align-items:center;gap:10px;padding:11px 16px;border-radius:2px;
-    border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
-    font-family:"Space Mono",monospace,var(--body);font-size:13.5px;color:#e5e7eb;
-    box-shadow:0 6px 0 0 rgba(0,0,0,.55);transition:transform .1s, box-shadow .1s;
+}
+
+.burger{
+  display:none;
+  width:36px;
+  height:36px;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  border-radius:2px;
+  background:rgba(255,255,255,.03);
+}
+
+.burger svg{
+  width:18px;
+  height:18px;
+  color:#d1d5db;
+}
+
+#mobileNav{
+  display:none;
+  border-top:1px solid var(--border);
+  background:rgba(10,10,10,.92);
+}
+
+#mobileNav a{
+  display:block;
+  padding:14px 24px;
+  font-size:14px;
+  font-weight:700;
+  text-transform:uppercase;
+  color:#d1d5db;
+}
+
+#mobileNav a:hover{
+  background:rgba(255,255,255,.04);
+  color:#fff;
+}
+
+/* ================= MAIN ================= */
+
+main{
+  flex:1;
+  width:100%;
+  max-width:1140px;
+  margin:0 auto;
+  padding:0 24px 40px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+  animation:fade .3s ease;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(6px);
   }
-  .chip:hover{transform:translateY(1px);box-shadow:0 5px 0 0 rgba(0,0,0,.55);border-color:rgba(255,255,255,.25);}
-  .chip .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;}
-  .chip svg{width:14px;height:14px;color:#6b7280;}
-  .btn-solid{
-    display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:2px;
-    background:var(--primary);color:#fff;font-weight:800;font-size:13.5px;text-transform:uppercase;
-    box-shadow:0 6px 0 0 color-mix(in srgb, var(--primary) 45%, #000);
-    transition:transform .1s, box-shadow .1s, filter .15s;
+  to{
+    opacity:1;
+    transform:none;
   }
-  .btn-solid:hover{filter:brightness(1.08);transform:translateY(1px);box-shadow:0 5px 0 0 color-mix(in srgb, var(--primary) 45%, #000);}
+}
+
+/* ================= HERO ================= */
+
+.land-hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--card-bg);
+  margin:24px 0 44px;
+}
+
+.land-hero-bg{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      ellipse 65% 90% at 88% 10%,
+      rgba(234,64,237,.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 55% 60% at 5% 95%,
+      rgba(88,101,242,.12),
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      #0d0d0f 0%,
+      #141014 55%,
+      #0a0a0a 100%
+    );
+}
+
+.land-hero-inner{
+  position:relative;
+  padding:56px 36px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family:"Space Mono",monospace;
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--primary);
+}
+
+.kicker::before{
+  content:"";
+  width:20px;
+  height:1px;
+  background:var(--primary);
+}
+
+.land-hero-inner h1{
+  font-size:clamp(30px,5vw,52px);
+  color:#fff;
+  max-width:14ch;
+  line-height:1.06;
+}
+
+.land-hero-inner .lead{
+  margin-top:2px;
+  max-width:48ch;
+  font-size:15.5px;
+  color:#d1d5db;
+}
+
+.land-ctas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:6px;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 16px;
+  border-radius:2px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(6px);
+  font-family:"Space Mono",monospace,var(--body);
+  font-size:13.5px;
+  color:#e5e7eb;
+  box-shadow:0 6px 0 0 rgba(0,0,0,.55);
+  transition:transform .1s,box-shadow .1s;
+}
+
+.chip:hover{
+  transform:translateY(1px);
+  box-shadow:0 5px 0 0 rgba(0,0,0,.55);
+  border-color:rgba(255,255,255,.25);
+}
+
+.chip .lbl{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#9ca3af;
+}
+
+.chip svg{
+  width:14px;
+  height:14px;
+  color:#6b7280;
+}
+
+.btn-solid,
+.btn-discord{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 20px;
+  border-radius:2px;
+  color:#fff;
+  font-weight:800;
+  font-size:13.5px;
+  text-transform:uppercase;
+  transition:transform .1s,box-shadow .1s,filter .15s;
+}
+
+.btn-solid{
+  background:var(--primary);
+  box-shadow:0 6px 0 0 color-mix(
+    in srgb,
+    var(--primary) 45%,
+    #000
+  );
+}
+
+.btn-discord{
+  background:var(--discord);
+  box-shadow:0 6px 0 0 #3a44b8;
+}
+
+.btn-solid:hover,
+.btn-discord:hover{
+  filter:brightness(1.08);
+  transform:translateY(1px);
+}
+
+.btn-solid:hover{
+  box-shadow:0 5px 0 0 color-mix(
+    in srgb,
+    var(--primary) 45%,
+    #000
+  );
+}
+
+.btn-discord:hover{
+  box-shadow:0 5px 0 0 #3a44b8;
+}
+
+.btn-discord svg{
+  width:16px;
+  height:16px;
+}
+
+.stat-strip{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+  margin-top:14px;
+  padding-top:22px;
+  border-top:1px solid var(--border);
+}
+
+.stat b{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-family:"Space Mono",monospace;
+  font-size:22px;
+  color:#fff;
+}
+
+.stat span{
+  display:block;
+  margin-top:2px;
+  font-size:11px;
+  color:var(--text-faint);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.stat .liveDot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 8px #22c55e;
+}
+
+/* ================= SECTIONS ================= */
+
+.shead{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.shead .bar{
+  width:4px;
+  height:24px;
+  border-radius:2px;
+  background:var(--primary);
+  flex:none;
+}
+
+.shead h2{
+  font-size:19px;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  color:#fff;
+}
+
+section.blk{
+  margin-bottom:56px;
+}
+
+/* ================= MODE ================= */
+
+.mode-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+.mode-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:22px 20px;
+  transition:transform .15s,border-color .15s;
+}
+
+.mode-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--border-strong);
+}
+
+.mode-card .mi{
+  width:40px;
+  height:40px;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:repeat(6,1fr);
+  gap:1.5px;
+  margin-bottom:14px;
+}
+
+.mode-card .mi i{
+  border-radius:1px;
+}
+
+.mode-card h3{
+  font-family:var(--body);
+  font-size:14.5px;
+  font-weight:700;
+  color:#fff;
+  text-transform:uppercase;
+}
+
+.mode-card p{
+  margin-top:8px;
+  font-size:13px;
+}
+
+/* ================= SPLIT ================= */
+
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:44px;
+  align-items:center;
+}
+
+.checklist li{
+  display:flex;
+  gap:10px;
+  font-size:14px;
+  color:var(--text-dim);
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.checklist svg{
+  flex:none;
+  width:15px;
+  height:15px;
+  color:var(--primary);
+  margin-top:2px;
+}
+
+.info-box{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:26px;
+  font-family:"Space Mono",monospace;
+  font-size:13px;
+  color:var(--text-dim);
+}
+
+.info-box .row{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:9px 0;
+  border-bottom:1px dashed var(--border);
+}
+
+.info-box .row:last-child{
+  border-bottom:none;
+}
+
+.info-box .row span:last-child{
+  color:#fff;
+}
+
+/* ================= RULES ================= */
+
+.rules-head{
+  margin:24px 0 34px;
+}
+
+.rules-head h2{
+  font-size:clamp(24px,3vw,34px);
+  color:#fff;
+}
+
+.rules-head p{
+  margin-top:10px;
+  font-size:14px;
+}
+
+.rules-toc{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:30px;
+}
+
+.rules-toc a{
+  padding:7px 14px;
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  color:#9ca3af;
+  transition:border-color .15s,color .15s;
+}
+
+.rules-toc a:hover{
+  border-color:var(--primary);
+  color:#fff;
+}
+
+.rule-sec{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:24px 26px;
+  margin-bottom:16px;
+}
+
+.rule-sec .rh{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.rule-sec .rh .tag{
+  font-family:var(--disp);
+  font-weight:800;
+  color:var(--primary);
+  font-size:15px;
+}
+
+.rule-sec .rh h3{
+  font-size:16px;
+  color:#fff;
+  text-transform:uppercase;
+}
+
+.rule-sec ol{
+  counter-reset:it;
+}
+
+.rule-sec ol > li{
+  counter-increment:it;
+  position:relative;
+  padding:8px 0 8px 26px;
+  font-size:14px;
+  color:var(--text-dim);
+  border-bottom:1px solid var(--border);
+}
+
+.rule-sec ol > li:last-child{
+  border-bottom:none;
+}
+
+.rule-sec ol > li::before{
+  content:counter(it)".";
+  position:absolute;
+  left:0;
+  top:8px;
+  color:var(--text-faint);
+  font-weight:700;
+  font-size:12.5px;
+}
+
+.rule-sec ol > li b{
+  color:#fff;
+}
+
+.rule-sec ul.sub{
+  margin:8px 0 0 16px;
+}
+
+.rule-sec ul.sub li{
+  list-style:disc;
+  color:var(--text-dim);
+  font-size:13.5px;
+  padding:3px 0;
+  margin-left:8px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+  border-top:1px solid var(--border);
+}
+
+.footer-inner{
+  max-width:1140px;
+  margin:0 auto;
+  padding:26px 24px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.footer-inner span{
+  font-size:13px;
+  color:#4b5563;
+}
+
+.footer-inner a{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  color:#6b7280;
+}
+
+.footer-inner a:hover{
+  color:#d1d5db;
+}
+
+.fine{
+  text-align:center;
+  padding:0 24px 30px;
+  font-size:11.5px;
+  color:#3f4451;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width:860px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .burger{
+    display:flex;
+  }
+
+  .split{
+    grid-template-columns:1fr;
+  }
+
+  .mode-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .land-hero-inner{
+    padding:36px 22px;
+  }
+}
+
+@media (max-width:560px){
+
+  main{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .nav-inner{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .server-grid{
+    grid-template-columns:1fr;
+  }
+
+  .mode-grid{
+    grid-template-columns:1fr;
+  }
+
+  .info-box .row{
+    flex-direction:column;
+    gap:3px;
+  }
+
+  .land-ctas{
+    flex-direction:column;
+  }
+
+  .chip,
+  .btn-solid,
   .btn-discord{
-    display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:2px;
-    background:var(--discord);color:#fff;font-weight:800;font-size:13.5px;text-transform:uppercase;
-    box-shadow:0 6px 0 0 #3a44b8;transition:transform .1s, box-shadow .1s, filter .15s;
+    width:100%;
+    justify-content:center;
   }
-  .btn-discord:hover{filter:brightness(1.08);transform:translateY(1px);box-shadow:0 5px 0 0 #3a44b8;}
-  .btn-discord svg{width:16px;height:16px;}
-
-  /* stat strip inside hero */
-  .stat-strip{display:flex;flex-wrap:wrap;gap:28px;margin-top:14px;padding-top:22px;border-top:1px solid var(--border);}
-  .stat b{display:flex;align-items:center;gap:7px;font-family:"Space Mono",monospace;font-size:22px;color:#fff;}
-  .stat span{display:block;margin-top:2px;font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.08em;}
-  .stat .liveDot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;}
-
-  /* ---------- SECTION HEAD ---------- */
-  .shead{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-  .shead .bar{width:4px;height:24px;border-radius:2px;background:var(--primary);flex:none;}
-  .shead h2{font-size:19px;text-transform:uppercase;letter-spacing:.02em;color:#fff;}
-  .shead p{margin-top:2px;}
-  section.blk{margin-bottom:56px;}
-
-  /* mode / feature cards on homepage */
-  .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  .mode-card{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:22px 20px;transition:transform .15s, border-color .15s;}
-  .mode-card:hover{transform:translateY(-3px);border-color:var(--border-strong);}
-  .mode-card .mi{width:40px;height:40px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);gap:1.5px;margin-bottom:14px;}
-  .mode-card .mi i{border-radius:1px;}
-  .mode-card h3{font-family:var(--body);font-size:14.5px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.02em;}
-  .mode-card p{margin-top:8px;font-size:13px;}
-
-  /* about split */
-  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;}
-  .checklist li{display:flex;gap:10px;font-size:14px;color:var(--text-dim);padding:9px 0;border-bottom:1px solid var(--border);}
-  .checklist li:last-child{border-bottom:none;}
-  .checklist svg{flex:none;width:15px;height:15px;color:var(--primary);margin-top:2px;}
-  .info-box{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:26px;font-family:"Space Mono",monospace;font-size:13px;color:var(--text-dim);}
-  .info-box .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--border);}
-  .info-box .row:last-child{border-bottom:none;}
-  .info-box .row span:last-child{color:#fff;}
-
-  /* ================= SHOP PAGE ================= */
-  .server-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  .server-card{
-    background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;text-align:left;
-    transition:transform .12s, border-color .15s;
-  }
-  .server-card.sel{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary);}
-  .server-card:not(.sel):hover{transform:translateY(-2px);border-color:var(--border-strong);}
-  .server-thumb{height:150px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);}
-  .server-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-top:1px solid var(--border);}
-  .server-foot h3{font-family:var(--body);font-size:14.5px;font-weight:700;text-transform:uppercase;color:#fff;}
-  .badge-sel{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:2px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;}
-  .badge-sel svg{width:12px;height:12px;}
-
-  .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
-  .product-card{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s, border-color .15s;}
-  .product-card:hover{transform:translateY(-3px);border-color:var(--border-strong);}
-  .product-thumb{position:relative;height:170px;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;}
-  .discount-badge{position:absolute;top:10px;right:10px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:2px;box-shadow:0 3px 0 0 rgba(0,0,0,.4);}
-  .product-body{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px;border-top:1px solid var(--border);}
-  .product-body h3{font-family:var(--body);font-size:14px;font-weight:700;color:#fff;line-height:1.35;}
-  .price-row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:auto;}
-  .price-old{display:block;font-size:11px;color:#525866;text-decoration:line-through;}
-  .price-new{display:block;margin-top:2px;font-size:19px;font-weight:800;color:#fff;}
-  .buy-btn{
-    padding:9px 18px;border-radius:2px;font-size:13px;font-weight:800;text-transform:uppercase;color:#fff;
-    background:var(--primary);box-shadow:0 6px 0 0 color-mix(in srgb, var(--primary) 45%, #000);
-    transition:transform .1s, box-shadow .1s, filter .15s;
-  }
-  .buy-btn:hover{filter:brightness(1.08);transform:translateY(1px);box-shadow:0 5px 0 0 color-mix(in srgb, var(--primary) 45%, #000);}
-  .buy-btn:active{transform:translateY(2px);box-shadow:none;}
-
-  .empty-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0;text-align:center;}
-  .empty-state .avatar{width:64px;height:64px;border-radius:8px;background:linear-gradient(160deg,#2b2b2f,#1a1a1c);opacity:.4;}
-  .empty-state p{color:#4b5563;font-size:13.5px;}
-
-  .shop-head{margin:24px 0 34px;}
-  .shop-head h2{font-size:clamp(24px,3vw,32px);color:#fff;}
-  .shop-head p{margin-top:8px;font-size:14px;}
-  .notice{display:flex;gap:12px;background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.3);border-radius:6px;padding:14px 16px;font-size:13px;color:#d1d5db;margin-bottom:36px;}
-  .notice svg{flex:none;width:17px;height:17px;color:#8b93f8;margin-top:1px;}
-
-  /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--border);}
-  .footer-inner{max-width:1140px;margin:0 auto;padding:26px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;}
-  .footer-inner span{font-size:13px;color:#4b5563;}
-  .footer-inner a{display:flex;align-items:center;gap:6px;font-size:13px;color:#6b7280;transition:color .15s;}
-  .footer-inner a:hover{color:#d1d5db;}
-  .fine{text-align:center;padding:0 24px 30px;font-size:11.5px;color:#3f4451;}
-
-  /* ---------- RULES PAGE ---------- */
-  .rules-head{margin:24px 0 34px;}
-  .rules-head h2{font-size:clamp(24px,3vw,34px);color:#fff;}
-  .rules-head p{margin-top:10px;font-size:14px;}
-  .rule-sec{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:24px 26px;margin-bottom:16px;}
-  .rule-sec .rh{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
-  .rule-sec .rh .tag{font-family:var(--disp);font-weight:800;color:var(--primary);font-size:15px;}
-  .rule-sec .rh h3{font-size:16px;color:#fff;text-transform:uppercase;letter-spacing:.02em;}
-  .rule-sec ol{counter-reset:it;}
-  .rule-sec ol > li{counter-increment:it;position:relative;padding:8px 0 8px 26px;font-size:14px;color:var(--text-dim);border-bottom:1px solid var(--border);}
-  .rule-sec ol > li:last-child{border-bottom:none;}
-  .rule-sec ol > li::before{content:counter(it)".";position:absolute;left:0;top:8px;color:var(--text-faint);font-weight:700;font-size:12.5px;}
-  .rule-sec ol > li b{color:#fff;}
-  .rule-sec ul.sub{margin:8px 0 0 16px;}
-  .rule-sec ul.sub li{list-style:disc;color:var(--text-dim);font-size:13.5px;padding:3px 0;margin-left:8px;}
-  .rules-toc{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;}
-  .rules-toc a{padding:7px 14px;border:1px solid var(--border);border-radius:2px;font-size:12px;font-weight:700;text-transform:uppercase;color:#9ca3af;transition:border-color .15s, color .15s;}
-  .rules-toc a:hover{border-color:var(--primary);color:#fff;}
-
-  @media (max-width:860px){
-    .nav-links{display:none;}
-    .burger{display:flex;}
-    .server-grid{grid-template-columns:1fr 1fr;}
-    .mode-grid{grid-template-columns:1fr 1fr;}
-    .split{grid-template-columns:1fr;}
-    .land-hero-inner{padding:36px 22px;}
-    .land-voxel{display:none;}
-  }
-  @media (max-width:560px){
-    .server-grid{grid-template-columns:1fr;}
-    .product-grid{grid-template-columns:1fr 1fr;}
-    .mode-grid{grid-template-columns:1fr;}
-  }
+}
 </style>
 </head>
+
 <body>
+
+<!-- ================= BACKGROUND ================= -->
 
 <div class="bg-fx">
   <div class="bg-base"></div>
@@ -257,490 +910,1113 @@
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
   <div class="blob blob3"></div>
+
   <svg class="noise" xmlns="http://www.w3.org/2000/svg">
-    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-    <rect width="100%" height="100%" filter="url(#n)"/>
+    <filter id="n">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.9"
+        numOctaves="2"
+        stitchTiles="stitch"
+      />
+      <feColorMatrix
+        type="saturate"
+        values="0"
+      />
+    </filter>
+
+    <rect
+      width="100%"
+      height="100%"
+      filter="url(#n)"
+    />
   </svg>
 </div>
 
 <div class="content">
-  <nav class="top">
-    <div class="nav-bar">
-      <div class="nav-inner">
-        <a href="#" class="logo" onclick="showPage('home');return false;">TORQUEHUB.PL SMP</a>
-        
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav class="top">
+
+  <div class="nav-bar">
+
+    <div class="nav-inner">
+
+      <a
+        href="#"
+        class="logo"
+        onclick="showPage('home');return false;"
+      >
+        TORQUEHUB.PL SMP
+      </a>
+
+      <!-- DESKTOP MENU -->
+
+      <div class="nav-links" id="navLinks">
+
+        <a
+          href="#"
+          data-page="home"
+          class="active"
+          onclick="showPage('home');return false;"
+        >
+          Główna
+          <span class="u"></span>
+        </a>
+
+        <!-- SKLEP -->
+        <a
+          href="https://sklep.torquehub.eu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Sklep
+          <span class="u"></span>
+        </a>
+
+        <!-- REGULAMIN -->
+        <a
+          href="#"
+          data-page="rules"
+          onclick="showPage('rules');return false;"
+        >
+          Regulamin
+          <span class="u"></span>
+        </a>
+
+        <!-- DISCORD -->
+        <a
+          href="https://dc.torquehub.eu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Discord
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M15 3h6v6"/>
+            <path d="M10 14 21 3"/>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          </svg>
+
+          <span class="u"></span>
+        </a>
+
+      </div>
+
+      <div class="nav-right">
+
+        <div class="status-pill">
+          <span class="dot"></span>
+          <span id="onlinePill">Ładowanie...</span>
         </div>
+
+        <button
+          class="burger"
+          onclick="toggleMobileNav()"
+          aria-label="Menu"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 5h16"/>
+            <path d="M4 12h16"/>
+            <path d="M4 19h16"/>
+          </svg>
+        </button>
+
       </div>
-      <div id="mobileNav">
-        <a href="#" onclick="showPage('home');toggleMobileNav();return false;">Główna</a>
-        <a href="https://sklep.torquehub.eu/">Sklep</a>
-        <a href="#" onclick="showPage('rules');toggleMobileNav();return false;">Regulamin</a>
-        <a href="https://dc.torquehub.eu/" target="_blank" rel="noopener noreferrer">Discord</a>
-      </div>
+
     </div>
-  </nav>
 
-  <main>
+    <!-- MOBILE MENU -->
 
-    <!-- ================= GŁÓWNA (LANDING) ================= -->
-    <div class="page active" id="page-home">
+    <div id="mobileNav">
 
-      <div class="land-hero">
-        <div class="land-hero-bg"></div>
-        <div class="land-hero-inner">
-          <div class="kicker">Serwer Minecraft Java · 1.18-26.2</div>
-          <h1>Witaj na TorqueHub.</h1>
-          <p class="lead">SurvivalSMP, cotygodniowe eventy i społeczność, która nie śpi. Dołącz do jednego z najlepszych SMP w Polsce.</p>
-          <div class="land-ctas">
-            <button class="chip" onclick="copyIP(this)"><span class="lbl">IP</span><span class="ipval">Torquehub.PL</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
-            </button>
-            <a class="btn-discord" href="https://dc.torquehub.eu/" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.21.375-.444.879-.608 1.278a18.27 18.27 0 0 0-5.487 0A12.6 12.6 0 0 0 9.182 3 19.74 19.74 0 0 0 4.75 4.372C1.9 8.58 1.15 12.68 1.5 16.72a19.9 19.9 0 0 0 6.02 3.03c.485-.657.917-1.354 1.29-2.086a12.9 12.9 0 0 1-2.03-.966c.17-.123.336-.252.497-.383a14.2 14.2 0 0 0 12.13 0c.163.14.328.27.497.383-.646.383-1.324.71-2.033.966.373.732.805 1.43 1.29 2.087a19.86 19.86 0 0 0 6.024-3.03c.412-4.69-.694-8.75-2.868-12.353ZM8.68 14.223c-.98 0-1.784-.897-1.784-2.002 0-1.104.786-2.003 1.784-2.003.999 0 1.803.9 1.785 2.003 0 1.105-.786 2.002-1.785 2.002Zm6.64 0c-.98 0-1.784-.897-1.784-2.002 0-1.104.786-2.003 1.784-2.003 1 0 1.803.9 1.785 2.003 0 1.105-.777 2.002-1.785 2.002Z"/></svg>
-              Dołącz na Discord
-            </a>
-            <button class="btn-solid" onclick="showPage('shop')">Zobacz sklep</button>
-          </div>
-          <div class="stat-strip">
-            <div class="stat">
-            <b><span class="liveDot"></span><span id="playerCount">Ładowanie...</span></b>
-            <span>Graczy online</span>
-            </div>
-            <div class="stat"><b>1.18-26.2</b><span>Wersja</span></div>
-            <div class="stat"><b>1</b><span>Tryb gry</span></div>
-          </div>
-        </div>
-      </div>
+      <a
+        href="#"
+        onclick="showPage('home');toggleMobileNav();return false;"
+      >
+        Główna
+      </a>
 
-      <section class="blk">
-        <div class="shead"><span class="bar"></span><h2>Tryb gry</h2></div>
-        <div class="mode-grid">
-          <div class="mode-card"><div class="mi" data-pattern="grass"></div><h3>SurvivalSMP</h3><p>Klasyczna rozgrywka na stałej mapie z ekonomią i sezonami co 6 miesięcy.</p></div>
-        </div>
-      </section>
+      <a
+        href="https://sklep.torquehub.eu/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sklep
+      </a>
 
-      <section class="blk">
-        <div class="split">
-          <div>
-            <div class="shead" style="margin-bottom:14px;"><span class="bar"></span><h2>Dlaczego TorqueHub</h2></div>
-            <p>Backupy co godzinę, Anti-Cheat monitorujący graczy 24/7 i moderacja, która realnie odpowiada na zgłoszenia.</p>
-            <ul class="checklist" style="margin-top:22px;">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg> Moderacja obecna codziennie 7:00–23:00</li>
-            </ul>
-          </div>
-          <div class="info-box">
-            <div class="row"><span>Wersja</span><span>1.18-26.2 (Java)</span></div>
-            <div class="row"><span>Adres</span><span>Torquehub.PL</span></div>
-            <div class="row"><span>Discord</span><span>dc.torquehub.eu</span></div>
-          </div>
-        </div>
-      </section>
+      <a
+        href="#"
+        onclick="showPage('rules');toggleMobileNav();return false;"
+      >
+        Regulamin
+      </a>
+
+      <a
+        href="https://dc.torquehub.eu/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Discord
+      </a>
 
     </div>
 
+  </div>
 
-    <!-- ================= REGULAMIN ================= -->
-    <div class="page" id="page-rules">
-      <div class="rules-head">
-        <div class="kicker" style="margin-bottom:10px;">Regulamin zakupów i zwrotów</div>
-        <h2>Regulamin — TorqueHub</h2>
-        <p>Dokonanie zakupu w sklepie serwera TorqueHub oznacza akceptację poniższego regulaminu.</p>
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+<!-- ================= HOME ================= -->
+
+<div class="page active" id="page-home">
+
+  <div class="land-hero">
+
+    <div class="land-hero-bg"></div>
+
+    <div class="land-hero-inner">
+
+      <div class="kicker">
+        Serwer Minecraft Java · 1.18-26.2
       </div>
 
-      <nav class="rules-toc">
-        <a href="#p1">§1 Ogólne</a><a href="#p2">§2 Zakupy</a><a href="#p3">§3 Zwroty</a>
-        <a href="#p4">§4 Błędna płatność</a><a href="#p5">§5 Produkty czasowe</a><a href="#p6">§6 Promocje</a>
-        <a href="#p7">§7 Reklamacje</a><a href="#p8">§8 Odpowiedzialność</a><a href="#p9">§9 Końcowe</a>
-      </nav>
+      <h1>
+        Witaj na TorqueHub.
+      </h1>
 
-      <div class="rule-sec" id="p1">
-        <div class="rh"><span class="tag">§1</span><h3>Postanowienia ogólne</h3></div>
-        <ol>
-          <li>Sklep serwera <b>TorqueHub</b> umożliwia zakup produktów cyfrowych przeznaczonych do wykorzystania na serwerze Minecraft.</li>
-          <li>Dokonanie zakupu oznacza akceptację niniejszego regulaminu.</li>
-          <li>Wszystkie ceny podane w sklepie są cenami brutto, o ile sklep nie wskazuje inaczej.</li>
-          <li>Produkty cyfrowe są dostarczane automatycznie lub w możliwie najkrótszym czasie po zaksięgowaniu płatności.</li>
-          <li>Użytkownik odpowiada za poprawność podanego nicku Minecraft oraz innych danych wymaganych podczas zakupu.</li>
-        </ol>
+      <p class="lead">
+        SurvivalSMP, cotygodniowe eventy i społeczność,
+        która nie śpi. Dołącz do jednego z najlepszych
+        SMP w Polsce.
+      </p>
+
+      <div class="land-ctas">
+
+        <!-- IP -->
+
+        <button
+          class="chip"
+          onclick="copyIP(this)"
+        >
+          <span class="lbl">IP</span>
+
+          <span class="ipval">
+            Torquehub.PL
+          </span>
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect
+              x="9"
+              y="9"
+              width="13"
+              height="13"
+              rx="1"
+            />
+
+            <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>
+          </svg>
+
+        </button>
+
+
+        <!-- DISCORD -->
+
+        <a
+          class="btn-discord"
+          href="https://dc.torquehub.eu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.21.375-.444.879-.608 1.278a18.27 18.27 0 0 0-5.487 0A12.6 12.6 0 0 0 9.182 3 19.74 19.74 0 0 0 4.75 4.372C1.9 8.58 1.15 12.68 1.5 16.72a19.9 19.9 0 0 0 6.02 3.03c.485-.657.917-1.354 1.29-2.086a12.9 12.9 0 0 1-2.03-.966c.17-.123.336-.252.497-.383a14.2 14.2 0 0 0 12.13 0c.163.14.328.27.497.383-.646.383-1.324.71-2.033.966.373.732.805 1.43 1.29 2.087a19.86 19.86 0 0 0 6.024-3.03c.412-4.69-.694-8.75-2.868-12.353ZM8.68 14.223c-.98 0-1.784-.897-1.784-2.002 0-1.104.786-2.003 1.784-2.003.999 0 1.803.9 1.785 2.003 0 1.105-.786 2.002-1.785 2.002Zm6.64 0c-.98 0-1.784-.897-1.784-2.002 0-1.104.786-2.003 1.784-2.003 1 0 1.803.9 1.785 2.003 0 1.105-.777 2.002-1.785 2.002Z"/>
+          </svg>
+
+          Dołącz na Discord
+
+        </a>
+
+
+        <!-- SHOP -->
+
+        <a
+          class="btn-solid"
+          href="https://sklep.torquehub.eu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Zobacz sklep
+        </a>
+
       </div>
 
-      <div class="rule-sec" id="p2">
-        <div class="rh"><span class="tag">§2</span><h3>Zakupy</h3></div>
-        <ol>
-          <li>Przed dokonaniem płatności użytkownik powinien sprawdzić, czy wybrany produkt oraz podane dane są prawidłowe.</li>
-          <li>Zakup produktu cyfrowego jest przypisany do konta/nicku wskazanego podczas składania zamówienia.</li>
-          <li>TorqueHub nie odpowiada za błędne dane podane przez kupującego, jeżeli uniemożliwiły one prawidłowe dostarczenie produktu.</li>
-          <li>Zabrania się wykorzystywania błędów sklepu lub systemu płatności w celu uzyskania produktów bez dokonania prawidłowej zapłaty.</li>
-          <li>W przypadku problemów z realizacją zamówienia należy skontaktować się z administracją poprzez kanał pomocy na Discordzie.</li>
-        </ol>
+
+      <!-- STATS -->
+
+      <div class="stat-strip">
+
+        <div class="stat">
+
+          <b>
+            <span class="liveDot"></span>
+            <span id="playerCount">
+              Ładowanie...
+            </span>
+          </b>
+
+          <span>
+            Graczy online
+          </span>
+
+        </div>
+
+        <div class="stat">
+          <b>1.18-26.2</b>
+          <span>Wersja</span>
+        </div>
+
+        <div class="stat">
+          <b>1</b>
+          <span>Tryb gry</span>
+        </div>
+
       </div>
 
-      <div class="rule-sec" id="p3">
-        <div class="rh"><span class="tag">§3</span><h3>Zwroty</h3></div>
-        <ol>
-          <li>Produkty cyfrowe mogą podlegać ograniczeniom dotyczącym prawa odstąpienia od umowy, zgodnie z obowiązującymi przepisami prawa.</li>
-          <li>W przypadku rozpoczęcia świadczenia usługi cyfrowej za wyraźną zgodą użytkownika przed upływem ustawowego terminu odstąpienia, prawo odstąpienia może nie przysługiwać.</li>
-          <li>Zwrot nie przysługuje w szczególności za produkt, który został już wykorzystany, aktywowany lub dostarczony na konto użytkownika, jeżeli przepisy prawa pozwalają na wyłączenie prawa odstąpienia.</li>
-          <li>Każdy przypadek zwrotu jest rozpatrywany indywidualnie z uwzględnieniem obowiązujących przepisów.</li>
-          <li>Samowolne wykonywanie <b>chargebacku</b> lub zgłaszanie nieprawdziwych informacji dotyczących płatności może skutkować zablokowaniem zakupionych produktów oraz konta do czasu wyjaśnienia sprawy.</li>
-        </ol>
+    </div>
+
+  </div>
+
+
+  <!-- TRYB GRY -->
+
+  <section class="blk">
+
+    <div class="shead">
+      <span class="bar"></span>
+      <h2>Tryb gry</h2>
+    </div>
+
+    <div class="mode-grid">
+
+      <div class="mode-card">
+
+        <div
+          class="mi"
+          data-pattern="grass"
+        ></div>
+
+        <h3>
+          SurvivalSMP
+        </h3>
+
+        <p>
+          Klasyczna rozgrywka na stałej mapie
+          z ekonomią i sezonami co 6 miesięcy.
+        </p>
+
       </div>
 
-      <div class="rule-sec" id="p4">
-        <div class="rh"><span class="tag">§4</span><h3>Błędna lub nieprawidłowa płatność</h3></div>
-        <ol>
-          <li>Jeżeli środki zostały pobrane, a produkt nie został dostarczony, użytkownik powinien skontaktować się z administracją.
-            <ul class="sub">
-              <li>nick Minecraft,</li>
-              <li>nazwę zakupionego produktu,</li>
-              <li>przybliżoną datę i godzinę zakupu,</li>
-              <li>numer zamówienia lub identyfikator transakcji, jeśli jest dostępny.</li>
-            </ul>
+    </div>
+
+  </section>
+
+
+  <!-- DLACZEGO TORQUEHUB -->
+
+  <section class="blk">
+
+    <div class="split">
+
+      <div>
+
+        <div
+          class="shead"
+          style="margin-bottom:14px;"
+        >
+          <span class="bar"></span>
+          <h2>
+            Dlaczego TorqueHub
+          </h2>
+        </div>
+
+        <p>
+          Backupy co godzinę, Anti-Cheat monitorujący
+          graczy 24/7 i moderacja, która realnie
+          odpowiada na zgłoszenia.
+        </p>
+
+        <ul
+          class="checklist"
+          style="margin-top:22px;"
+        >
+
+          <li>
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+            >
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+
+            Moderacja obecna codziennie 7:00–23:00
+
           </li>
-          <li>Nie należy przesyłać danych karty płatniczej, haseł ani innych poufnych danych.</li>
-        </ol>
+
+        </ul>
+
       </div>
 
-      <div class="rule-sec" id="p5">
-        <div class="rh"><span class="tag">§5</span><h3>Produkty czasowe</h3></div>
-        <ol>
-          <li>Produkty posiadające określony czas działania, np. <b>VIP na 30 dni</b>, obowiązują przez okres wskazany w opisie produktu.</li>
-          <li>Czas działania produktu rozpoczyna się zgodnie z zasadami określonymi przy danym produkcie.</li>
-          <li>Produkt czasowy nie zostaje automatycznie przedłużony, chyba że sklep wyraźnie informuje o automatycznym odnowieniu.</li>
-        </ol>
-      </div>
 
-      <div class="rule-sec" id="p6">
-        <div class="rh"><span class="tag">§6</span><h3>Promocje i rabaty</h3></div>
-        <ol>
-          <li>Promocje obowiązują przez okres wskazany w sklepie.</li>
-          <li>Promocje mogą posiadać określone warunki, limity lub wyłączenia.</li>
-          <li>Po zakończeniu promocji nie ma możliwości żądania wyrównania ceny do wcześniejszej ceny promocyjnej.</li>
-        </ol>
-      </div>
+      <div class="info-box">
 
-      <div class="rule-sec" id="p7">
-        <div class="rh"><span class="tag">§7</span><h3>Reklamacje</h3></div>
-        <ol>
-          <li>W przypadku nieotrzymania zakupionego produktu lub jego nieprawidłowego działania użytkownik może złożyć reklamację.</li>
-          <li>Reklamację należy zgłosić poprzez odpowiedni kanał na Discordzie TorqueHub.</li>
-          <li>Administracja może poprosić o dodatkowe informacje potrzebne do zweryfikowania transakcji.</li>
-          <li>Reklamacje są rozpatrywane w możliwie krótkim czasie.</li>
-        </ol>
-      </div>
+        <div class="row">
+          <span>Wersja</span>
+          <span>1.18-26.2 (Java)</span>
+        </div>
 
-      <div class="rule-sec" id="p8">
-        <div class="rh"><span class="tag">§8</span><h3>Odpowiedzialność</h3></div>
-        <ol>
-          <li>TorqueHub nie ponosi odpowiedzialności za problemy wynikające z:
-            <ul class="sub">
-              <li>podania błędnego nicku,</li>
-              <li>problemów po stronie urządzenia lub połączenia użytkownika,</li>
-              <li>nieprawidłowego działania zewnętrznego operatora płatności,</li>
-              <li>okoliczności niezależnych od administracji.</li>
-            </ul>
-          </li>
-          <li>W przypadku awarii serwera zakupione produkty mogą być czasowo niedostępne. Nie oznacza to automatycznie prawa do zwrotu.</li>
-        </ol>
-      </div>
+        <div class="row">
+          <span>Adres</span>
+          <span>Torquehub.PL</span>
+        </div>
 
-      <div class="rule-sec" id="p9">
-        <div class="rh"><span class="tag">§9</span><h3>Postanowienia końcowe</h3></div>
-        <ol>
-          <li>Regulamin może być aktualizowany w przypadku zmian funkcjonowania sklepu lub obowiązujących przepisów.</li>
-          <li>Aktualna wersja regulaminu jest dostępna w sklepie oraz na Discordzie TorqueHub.</li>
-          <li>W sprawach nieuregulowanych niniejszym regulaminem zastosowanie mają obowiązujące przepisy prawa.</li>
-          <li>W przypadku pytań dotyczących zakupu lub zwrotu należy skontaktować się z administracją.</li>
-        </ol>
+        <div class="row">
+          <span>Discord</span>
+          <span>dc.torquehub.eu</span>
+        </div>
+
+        <div class="row">
+          <span>Sklep</span>
+          <span>sklep.torquehub.eu</span>
+        </div>
+
       </div>
 
     </div>
 
-  </main>
+  </section>
 
-  <footer>
-    <div class="footer-inner">
-      <span>Zasilane przez</span>
-      <a href="#" onclick="return false;">TorqueHub</a>
-    </div>
-    <div class="fine">TorqueHub nie jest w żaden sposób powiązany z firmą Mojang ani Microsoft. Minecraft jest znakiem towarowym Mojang AB.</div>
-  </footer>
 </div>
 
+
+<!-- ================= RULES ================= -->
+
+<div class="page" id="page-rules">
+
+  <div class="rules-head">
+
+    <div
+      class="kicker"
+      style="margin-bottom:10px;"
+    >
+      Regulamin zakupów i zwrotów
+    </div>
+
+    <h2>
+      Regulamin — TorqueHub
+    </h2>
+
+    <p>
+      Dokonanie zakupu w sklepie serwera TorqueHub
+      oznacza akceptację poniższego regulaminu.
+    </p>
+
+  </div>
+
+
+  <nav class="rules-toc">
+
+    <a href="#p1">§1 Ogólne</a>
+    <a href="#p2">§2 Zakupy</a>
+    <a href="#p3">§3 Zwroty</a>
+    <a href="#p4">§4 Błędna płatność</a>
+    <a href="#p5">§5 Produkty czasowe</a>
+    <a href="#p6">§6 Promocje</a>
+    <a href="#p7">§7 Reklamacje</a>
+    <a href="#p8">§8 Odpowiedzialność</a>
+    <a href="#p9">§9 Końcowe</a>
+
+  </nav>
+
+
+  <div class="rule-sec" id="p1">
+
+    <div class="rh">
+      <span class="tag">§1</span>
+      <h3>Postanowienia ogólne</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Sklep serwera <b>TorqueHub</b> umożliwia zakup
+        produktów cyfrowych przeznaczonych do wykorzystania
+        na serwerze Minecraft.
+      </li>
+
+      <li>
+        Dokonanie zakupu oznacza akceptację niniejszego regulaminu.
+      </li>
+
+      <li>
+        Wszystkie ceny podane w sklepie są cenami brutto,
+        o ile sklep nie wskazuje inaczej.
+      </li>
+
+      <li>
+        Produkty cyfrowe są dostarczane automatycznie
+        lub w możliwie najkrótszym czasie po zaksięgowaniu płatności.
+      </li>
+
+      <li>
+        Użytkownik odpowiada za poprawność podanego nicku
+        Minecraft oraz innych danych wymaganych podczas zakupu.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p2">
+
+    <div class="rh">
+      <span class="tag">§2</span>
+      <h3>Zakupy</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Przed dokonaniem płatności użytkownik powinien
+        sprawdzić, czy wybrany produkt oraz podane dane są prawidłowe.
+      </li>
+
+      <li>
+        Zakup produktu cyfrowego jest przypisany do konta/nicku
+        wskazanego podczas składania zamówienia.
+      </li>
+
+      <li>
+        TorqueHub nie odpowiada za błędne dane podane przez kupującego,
+        jeżeli uniemożliwiły one prawidłowe dostarczenie produktu.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania błędów sklepu lub systemu płatności
+        w celu uzyskania produktów bez dokonania prawidłowej zapłaty.
+      </li>
+
+      <li>
+        W przypadku problemów z realizacją zamówienia należy
+        skontaktować się z administracją poprzez kanał pomocy na Discordzie.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p3">
+
+    <div class="rh">
+      <span class="tag">§3</span>
+      <h3>Zwroty</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Produkty cyfrowe mogą podlegać ograniczeniom dotyczącym
+        prawa odstąpienia od umowy, zgodnie z obowiązującymi przepisami prawa.
+      </li>
+
+      <li>
+        W przypadku rozpoczęcia świadczenia usługi cyfrowej za wyraźną
+        zgodą użytkownika przed upływem ustawowego terminu odstąpienia,
+        prawo odstąpienia może nie przysługiwać.
+      </li>
+
+      <li>
+        Zwrot nie przysługuje w szczególności za produkt,
+        który został już wykorzystany, aktywowany lub dostarczony
+        na konto użytkownika, jeżeli przepisy prawa pozwalają
+        na wyłączenie prawa odstąpienia.
+      </li>
+
+      <li>
+        Każdy przypadek zwrotu jest rozpatrywany indywidualnie
+        z uwzględnieniem obowiązujących przepisów.
+      </li>
+
+      <li>
+        Samowolne wykonywanie <b>chargebacku</b> lub zgłaszanie
+        nieprawdziwych informacji dotyczących płatności może skutkować
+        zablokowaniem zakupionych produktów oraz konta do czasu
+        wyjaśnienia sprawy.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p4">
+
+    <div class="rh">
+      <span class="tag">§4</span>
+      <h3>Błędna lub nieprawidłowa płatność</h3>
+    </div>
+
+    <ol>
+
+      <li>
+
+        Jeżeli środki zostały pobrane,
+        a produkt nie został dostarczony,
+        użytkownik powinien skontaktować się z administracją.
+
+        <ul class="sub">
+          <li>nick Minecraft,</li>
+          <li>nazwę zakupionego produktu,</li>
+          <li>przybliżoną datę i godzinę zakupu,</li>
+          <li>numer zamówienia lub identyfikator transakcji.</li>
+        </ul>
+
+      </li>
+
+      <li>
+        Nie należy przesyłać danych karty płatniczej,
+        haseł ani innych poufnych danych.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p5">
+
+    <div class="rh">
+      <span class="tag">§5</span>
+      <h3>Produkty czasowe</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Produkty posiadające określony czas działania,
+        np. <b>VIP na 30 dni</b>, obowiązują przez okres
+        wskazany w opisie produktu.
+      </li>
+
+      <li>
+        Czas działania produktu rozpoczyna się zgodnie
+        z zasadami określonymi przy danym produkcie.
+      </li>
+
+      <li>
+        Produkt czasowy nie zostaje automatycznie przedłużony,
+        chyba że sklep wyraźnie informuje o automatycznym odnowieniu.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p6">
+
+    <div class="rh">
+      <span class="tag">§6</span>
+      <h3>Promocje i rabaty</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Promocje obowiązują przez okres wskazany w sklepie.
+      </li>
+
+      <li>
+        Promocje mogą posiadać określone warunki,
+        limity lub wyłączenia.
+      </li>
+
+      <li>
+        Po zakończeniu promocji nie ma możliwości żądania
+        wyrównania ceny do wcześniejszej ceny promocyjnej.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p7">
+
+    <div class="rh">
+      <span class="tag">§7</span>
+      <h3>Reklamacje</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        W przypadku nieotrzymania zakupionego produktu
+        lub jego nieprawidłowego działania użytkownik może złożyć reklamację.
+      </li>
+
+      <li>
+        Reklamację należy zgłosić poprzez odpowiedni kanał
+        na Discordzie TorqueHub.
+      </li>
+
+      <li>
+        Administracja może poprosić o dodatkowe informacje
+        potrzebne do zweryfikowania transakcji.
+      </li>
+
+      <li>
+        Reklamacje są rozpatrywane w możliwie krótkim czasie.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p8">
+
+    <div class="rh">
+      <span class="tag">§8</span>
+      <h3>Odpowiedzialność</h3>
+    </div>
+
+    <ol>
+
+      <li>
+
+        TorqueHub nie ponosi odpowiedzialności za problemy wynikające z:
+
+        <ul class="sub">
+          <li>podania błędnego nicku,</li>
+          <li>problemów po stronie urządzenia lub połączenia użytkownika,</li>
+          <li>nieprawidłowego działania zewnętrznego operatora płatności,</li>
+          <li>okoliczności niezależnych od administracji.</li>
+        </ul>
+
+      </li>
+
+      <li>
+        W przypadku awarii serwera zakupione produkty mogą być
+        czasowo niedostępne. Nie oznacza to automatycznie prawa do zwrotu.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <div class="rule-sec" id="p9">
+
+    <div class="rh">
+      <span class="tag">§9</span>
+      <h3>Postanowienia końcowe</h3>
+    </div>
+
+    <ol>
+
+      <li>
+        Regulamin może być aktualizowany w przypadku zmian
+        funkcjonowania sklepu lub obowiązujących przepisów.
+      </li>
+
+      <li>
+        Aktualna wersja regulaminu jest dostępna
+        w sklepie oraz na Discordzie TorqueHub.
+      </li>
+
+      <li>
+        W sprawach nieuregulowanych niniejszym regulaminem
+        zastosowanie mają obowiązujące przepisy prawa.
+      </li>
+
+      <li>
+        W przypadku pytań dotyczących zakupu lub zwrotu
+        należy skontaktować się z administracją.
+      </li>
+
+    </ol>
+
+  </div>
+
+</div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <span>
+      Zasilane przez
+    </span>
+
+    <a
+      href="https://torquehub.eu/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      TorqueHub
+    </a>
+
+  </div>
+
+  <div class="fine">
+    TorqueHub nie jest w żaden sposób powiązany z firmą
+    Mojang ani Microsoft. Minecraft jest znakiem towarowym Mojang AB.
+  </div>
+
+</footer>
+
+</div>
+
+
 <script>
-  // ==========================================
-  // PIXEL-ART
-  // ==========================================
 
-  function paintGrid(el, pattern, palette) {
-    if (!el) return;
+/* ==========================================
+   PIXEL ART
+========================================== */
 
-    el.innerHTML = '';
+function paintGrid(el, pattern, palette){
 
-    pattern.forEach(row => {
-      row.forEach(v => {
-        const i = document.createElement('i');
-        i.style.background = v === 0 ? 'transparent' : palette[v];
-        el.appendChild(i);
-      });
+  if(!el) return;
+
+  el.innerHTML='';
+
+  pattern.forEach(row=>{
+
+    row.forEach(v=>{
+
+      const i=document.createElement('i');
+
+      i.style.background=
+        v===0
+          ? 'transparent'
+          : palette[v];
+
+      el.appendChild(i);
+
     });
+
+  });
+
+}
+
+
+const smallPatterns={
+
+  grass:[
+    [0,1,1,0],
+    [1,3,3,1],
+    [1,3,3,1],
+    [1,4,4,1],
+    [1,4,4,1],
+    [0,1,1,0]
+  ],
+
+  sword:[
+    [0,0,0,1],
+    [0,0,1,3],
+    [0,1,3,1],
+    [1,3,1,0],
+    [1,4,0,0],
+    [1,1,0,0]
+  ],
+
+  chest:[
+    [1,1,1,1],
+    [1,3,3,1],
+    [1,1,1,1],
+    [1,4,4,1],
+    [1,4,4,1],
+    [1,1,1,1]
+  ],
+
+  diamond:[
+    [0,1,1,0],
+    [1,2,2,1],
+    [1,2,2,1],
+    [0,1,2,0]
+  ]
+
+};
+
+
+document.querySelectorAll('.mi').forEach(el=>{
+
+  const pattern=
+    smallPatterns[el.dataset.pattern] ||
+    smallPatterns.grass;
+
+  paintGrid(
+    el,
+    pattern,
+    {
+      1:'#3f3f46',
+      2:'#38bdf8',
+      3:'#ea40ed',
+      4:'#7c3aed'
+    }
+  );
+
+});
+
+
+/* ==========================================
+   PAGE NAVIGATION
+========================================== */
+
+function showPage(name){
+
+  document.querySelectorAll('.page').forEach(page=>{
+    page.classList.remove('active');
+  });
+
+  const selectedPage=
+    document.getElementById('page-'+name);
+
+  if(selectedPage){
+    selectedPage.classList.add('active');
   }
 
-  const smallPatterns = {
-    grass: [
-      [0,1,1,0],
-      [1,3,3,1],
-      [1,3,3,1],
-      [1,4,4,1],
-      [1,4,4,1],
-      [0,1,1,0]
-    ],
+  document
+    .querySelectorAll('.nav-links a[data-page]')
+    .forEach(link=>{
 
-    sword: [
-      [0,0,0,1],
-      [0,0,1,3],
-      [0,1,3,1],
-      [1,3,1,0],
-      [1,4,0,0],
-      [1,1,0,0]
-    ],
-
-    chest: [
-      [1,1,1,1],
-      [1,3,3,1],
-      [1,1,1,1],
-      [1,4,4,1],
-      [1,4,4,1],
-      [1,1,1,1]
-    ],
-
-    diamond: [
-      [0,1,1,0],
-      [1,2,2,1],
-      [1,2,2,1],
-      [0,1,2,0]
-    ]
-  };
-
-  document.querySelectorAll('.mi').forEach(el => {
-    const pattern =
-      smallPatterns[el.dataset.pattern] ||
-      smallPatterns.grass;
-
-    paintGrid(el, pattern, {
-      1: '#3f3f46',
-      2: '#38bdf8',
-      3: '#ea40ed',
-      4: '#7c3aed'
-    });
-  });
-
-
-  // ==========================================
-  // CROWN
-  // ==========================================
-
-  const crownPattern = [
-    [0,3,0,0,0,3,0],
-    [3,4,3,0,3,4,3],
-    [3,4,4,3,4,4,3],
-    [0,4,4,4,4,4,0],
-    [0,4,4,4,4,4,0],
-    [0,0,4,4,4,0,0]
-  ];
-
-  document.querySelectorAll('[data-crown]').forEach(el => {
-
-    const grid = document.createElement('div');
-
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
-    grid.style.gridTemplateRows = 'repeat(6, 1fr)';
-    grid.style.gap = '2px';
-    grid.style.width = '84px';
-    grid.style.height = '72px';
-
-    el.appendChild(grid);
-
-    paintGrid(grid, crownPattern, {
-      3: '#fde68a',
-      4: el.dataset.crown === '2'
-        ? '#fbbf24'
-        : '#e5e7eb'
-    });
-
-  });
-
-
-  // ==========================================
-  // NAWIGACJA
-  // ==========================================
-
-  function showPage(name) {
-
-    document.querySelectorAll('.page').forEach(page => {
-      page.classList.remove('active');
-    });
-
-    const selectedPage = document.getElementById('page-' + name);
-
-    if (selectedPage) {
-      selectedPage.classList.add('active');
-    }
-
-    document.querySelectorAll('.nav-links a[data-page]').forEach(link => {
       link.classList.toggle(
         'active',
-        link.dataset.page === name
-      );
-    });
-
-    window.scrollTo({
-      top: 0,
-      behavior: 'instant'
-    });
-  }
-
-
-  // ==========================================
-  // KOPIOWANIE IP
-  // ==========================================
-
-  function copyIP(el) {
-
-    navigator.clipboard.writeText('Torquehub.PL')
-      .then(() => {
-
-        const span = el.querySelector('.ipval');
-
-        if (!span) return;
-
-        const original = span.textContent;
-
-        span.textContent = 'Skopiowano!';
-
-        setTimeout(() => {
-          span.textContent = original;
-        }, 1600);
-
-      })
-      .catch(error => {
-        console.error('Nie udało się skopiować IP:', error);
-      });
-
-  }
-
-
-  // ==========================================
-  // MOBILE MENU
-  // ==========================================
-
-  function toggleMobileNav() {
-
-    const menu = document.getElementById('mobileNav');
-
-    if (!menu) return;
-
-    menu.style.display =
-      menu.style.display === 'block'
-        ? 'none'
-        : 'block';
-  }
-
-
-  // ==========================================
-  // LICZNIK GRACZY MINECRAFT
-  // ==========================================
-
-  async function updatePlayers() {
-
-    try {
-
-      const response = await fetch(
-        'https://api.mcstatus.io/v2/status/java/torquehub.pl',
-        {
-          cache: 'no-store'
-        }
+        link.dataset.page===name
       );
 
-      if (!response.ok) {
-        throw new Error(
-          `API HTTP error: ${response.status}`
-        );
-      }
+    });
 
-      const data = await response.json();
+  window.scrollTo({
+    top:0,
+    behavior:'instant'
+  });
 
-      console.log('MCStatus:', data);
-
-      // Liczba graczy
-      const online = data.players?.online ?? 0;
-
-      // Maksymalna liczba graczy
-      const max = data.players?.max ?? 0;
-
-      // Elementy HTML
-      const playerCount =
-        document.getElementById('playerCount');
-
-      const onlinePill =
-        document.getElementById('onlinePill');
+}
 
 
-      // Główny licznik
-      if (playerCount) {
+/* ==========================================
+   COPY IP
+========================================== */
 
-        playerCount.textContent =
-          `${online} / ${max}`;
+function copyIP(el){
 
-      }
+  navigator.clipboard
+    .writeText('Torquehub.PL')
+    .then(()=>{
 
+      const span=
+        el.querySelector('.ipval');
 
-      // Licznik w menu
-      if (onlinePill) {
+      if(!span) return;
 
-        onlinePill.textContent =
-          `${online}/${max} online`;
+      const original=
+        span.textContent;
 
-      }
+      span.textContent=
+        'Skopiowano!';
 
+      setTimeout(()=>{
 
-    } catch (error) {
+        span.textContent=
+          original;
+
+      },1600);
+
+    })
+    .catch(error=>{
 
       console.error(
-        'Nie udało się pobrać liczby graczy:',
+        'Nie udało się skopiować IP:',
         error
       );
 
-      const playerCount =
-        document.getElementById('playerCount');
+    });
 
-      const onlinePill =
-        document.getElementById('onlinePill');
+}
 
 
-      if (playerCount) {
-        playerCount.textContent = 'Offline';
-      }
+/* ==========================================
+   MOBILE MENU
+========================================== */
 
-      if (onlinePill) {
-        onlinePill.textContent = 'Offline';
-      }
+function toggleMobileNav(){
+
+  const menu=
+    document.getElementById('mobileNav');
+
+  if(!menu) return;
+
+  menu.style.display=
+    menu.style.display==='block'
+      ? 'none'
+      : 'block';
+
+}
+
+
+/* ==========================================
+   PLAYER COUNT
+========================================== */
+
+async function updatePlayers(){
+
+  try{
+
+    const response=
+      await fetch(
+        'https://api.mcstatus.io/v2/status/java/torquehub.pl',
+        {
+          cache:'no-store'
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        `API HTTP error: ${response.status}`
+      );
+
+    }
+
+    const data=
+      await response.json();
+
+    console.log(
+      'MCStatus:',
+      data
+    );
+
+
+    const online=
+      data.players?.online ?? 0;
+
+    const max=
+      data.players?.max ?? 0;
+
+
+    const playerCount=
+      document.getElementById(
+        'playerCount'
+      );
+
+    const onlinePill=
+      document.getElementById(
+        'onlinePill'
+      );
+
+
+    if(playerCount){
+
+      playerCount.textContent=
+        `${online} / ${max}`;
+
+    }
+
+
+    if(onlinePill){
+
+      onlinePill.textContent=
+        `${online}/${max} online`;
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      'Nie udało się pobrać liczby graczy:',
+      error
+    );
+
+
+    const playerCount=
+      document.getElementById(
+        'playerCount'
+      );
+
+    const onlinePill=
+      document.getElementById(
+        'onlinePill'
+      );
+
+
+    if(playerCount){
+
+      playerCount.textContent=
+        'Offline';
+
+    }
+
+
+    if(onlinePill){
+
+      onlinePill.textContent=
+        'Offline';
 
     }
 
   }
 
+}
 
-  // ==========================================
-  // START LICZNIKA
-  // ==========================================
 
-  updatePlayers();
+/* ==========================================
+   START
+========================================== */
 
-  // Odświeżanie co 30 sekund
-  setInterval(updatePlayers, 30000);
+updatePlayers();
+
+setInterval(
+  updatePlayers,
+  30000
+);
 
 </script>
+
 </body>
 </html>

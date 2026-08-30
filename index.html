@@ -316,7 +316,10 @@
             <button class="btn-solid" onclick="showPage('shop')">Zobacz sklep</button>
           </div>
           <div class="stat-strip">
-            <div class="stat"><b><span class="liveDot"></span>128 / 500</b><span>Graczy online</span></div>
+            <div class="stat">
+            <b><span class="liveDot"></span><span id="playerCount">Ładowanie...</span></b>
+            <span>Graczy online</span>
+            </div>
             <div class="stat"><b>100%</b><span>Uptime (30 dni)</span></div>
             <div class="stat"><b>1.18-26.2</b><span>Wersja</span></div>
             <div class="stat"><b>4</b><span>Tryby gry</span></div>
@@ -553,6 +556,30 @@
     const m = document.getElementById('mobileNav');
     m.style.display = m.style.display === 'block' ? 'none' : 'block';
   }
+  async function updatePlayers() {
+  try {
+    const response = await fetch(
+      'https://api.mcstatus.io/v2/status/java/Torquehub.PL'
+    );
+
+    const data = await response.json();
+
+    const online = data.players?.online ?? 0;
+    const max = data.players?.max ?? 0;
+
+    document.getElementById('playerCount').textContent =
+      `${online} / ${max}`;
+
+    document.getElementById('onlinePill').textContent =
+      `${online}/${max} online`;
+  } catch (error) {
+    document.getElementById('playerCount').textContent = 'Offline';
+    document.getElementById('onlinePill').textContent = 'Offline';
+  }
+}
+
+updatePlayers();
+setInterval(updatePlayers, 30000);
 </script>
 </body>
 </html>

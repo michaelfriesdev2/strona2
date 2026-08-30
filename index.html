@@ -134,6 +134,7 @@ button{
   transform:translateX(-50%);
   width:1100px;
   height:600px;
+
   background:
     radial-gradient(
       closest-side,
@@ -147,6 +148,7 @@ button{
   left:-160px;
   width:420px;
   height:420px;
+
   background:
     radial-gradient(
       closest-side,
@@ -160,6 +162,7 @@ button{
   right:-130px;
   width:460px;
   height:460px;
+
   background:
     radial-gradient(
       closest-side,
@@ -181,6 +184,7 @@ button{
   position:relative;
   z-index:1;
   min-height:100vh;
+
   display:flex;
   flex-direction:column;
 }
@@ -273,6 +277,7 @@ nav.top{
 
 .nav-links a .u{
   position:absolute;
+
   left:14px;
   right:14px;
   bottom:5px;
@@ -361,7 +366,9 @@ nav.top{
 }
 
 
-/* MOBILE NAV */
+/* ==========================================
+   MOBILE NAV
+========================================== */
 
 #mobileNav{
   display:none;
@@ -996,12 +1003,14 @@ section.blk{
 
   transition:
     border-color .15s,
-    color .15s;
+    color .15s,
+    background .15s;
 }
 
 .rules-toc a:hover{
   border-color:var(--primary);
   color:#fff;
+  background:rgba(234,64,237,.06);
 }
 
 .rule-sec{
@@ -1014,6 +1023,8 @@ section.blk{
   padding:24px 26px;
 
   margin-bottom:16px;
+
+  scroll-margin-top:84px;
 }
 
 .rule-sec .rh{
@@ -1228,6 +1239,19 @@ footer{
     gap:3px;
   }
 
+  .rule-sec{
+    padding:20px 18px;
+  }
+
+  .rules-toc{
+    gap:6px;
+  }
+
+  .rules-toc a{
+    font-size:11px;
+    padding:7px 10px;
+  }
+
 }
 
 </style>
@@ -1256,6 +1280,7 @@ footer{
     class="noise"
     xmlns="http://www.w3.org/2000/svg"
   >
+
     <filter id="n">
 
       <feTurbulence
@@ -1315,8 +1340,6 @@ footer{
         id="navLinks"
       >
 
-        <!-- GŁÓWNA -->
-
         <a
           href="#"
           data-page="home"
@@ -1324,12 +1347,9 @@ footer{
           onclick="showPage('home');return false;"
         >
           Główna
-
           <span class="u"></span>
         </a>
 
-
-        <!-- SKLEP -->
 
         <a
           href="https://sklep.torquehub.eu/"
@@ -1346,9 +1366,7 @@ footer{
           >
 
             <path d="M15 3h6v6"/>
-
             <path d="M10 14 21 3"/>
-
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
 
           </svg>
@@ -1358,21 +1376,15 @@ footer{
         </a>
 
 
-        <!-- REGULAMIN -->
-
         <a
           href="#"
           data-page="rules"
           onclick="showPage('rules');return false;"
         >
           Regulamin
-
           <span class="u"></span>
-
         </a>
 
-
-        <!-- DISCORD -->
 
         <a
           href="https://dc.torquehub.eu/"
@@ -1389,9 +1401,7 @@ footer{
           >
 
             <path d="M15 3h6v6"/>
-
             <path d="M10 14 21 3"/>
-
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
 
           </svg>
@@ -1418,8 +1428,6 @@ footer{
         </div>
 
 
-        <!-- BURGER -->
-
         <button
           class="burger"
           onclick="toggleMobileNav()"
@@ -1434,9 +1442,7 @@ footer{
           >
 
             <path d="M4 5h16"/>
-
             <path d="M4 12h16"/>
-
             <path d="M4 19h16"/>
 
           </svg>
@@ -1459,7 +1465,6 @@ footer{
         Główna
       </a>
 
-
       <a
         href="https://sklep.torquehub.eu/"
         target="_blank"
@@ -1469,14 +1474,12 @@ footer{
         Sklep
       </a>
 
-
       <a
         href="#"
         onclick="showPage('rules');toggleMobileNav();return false;"
       >
         Regulamin
       </a>
-
 
       <a
         href="https://dc.torquehub.eu/"
@@ -1517,9 +1520,7 @@ footer{
 
     <div class="land-hero-bg"></div>
 
-
     <div class="land-hero-inner">
-
 
       <div class="kicker">
         Serwer Minecraft Java · 1.18-26.2
@@ -1621,7 +1622,6 @@ footer{
       <!-- STATS -->
 
       <div class="stat-strip">
-
 
         <div class="stat">
 
@@ -1779,7 +1779,6 @@ footer{
 
       <div class="info-box">
 
-
         <div class="row">
 
           <span>
@@ -1880,19 +1879,19 @@ footer{
     </a>
 
     <a href="#p5">
-      §5 Budowanie i działki
+      §5 Budowanie i ochrona terenu
     </a>
 
     <a href="#p6">
-      §6 PvP i kradzież
+      §6 PvP, kradzież i griefing
     </a>
 
     <a href="#p7">
-      §7 Oszustwa i niedozwolone oprogramowanie
+      §7 Cheaty i niedozwolone oprogramowanie
     </a>
 
     <a href="#p8">
-      §8 Błędy i wykorzystywanie bugów
+      §8 Błędy, bugi i exploity
     </a>
 
     <a href="#p9">
@@ -1904,7 +1903,7 @@ footer{
     </a>
 
     <a href="#p11">
-      §11 Odwołania od kar
+      §11 Odwołania
     </a>
 
     <a href="#p12">
@@ -1938,7 +1937,7 @@ footer{
       <li>
         Regulamin obowiązuje wszystkich użytkowników
         serwera <b>TorqueHub</b>, niezależnie od posiadanej
-        rangi lub statusu.
+        rangi, stażu oraz statusu.
       </li>
 
       <li>
@@ -1952,14 +1951,22 @@ footer{
       </li>
 
       <li>
-        Administracja ma prawo podejmować działania
-        niezbędne do zapewnienia prawidłowego działania
-        serwera i bezpieczeństwa jego użytkowników.
+        Korzystając z serwera, gracz zobowiązuje się
+        do przestrzegania zasad oraz stosowania się
+        do poleceń administracji dotyczących porządku
+        i bezpieczeństwa rozgrywki.
+      </li>
+
+      <li>
+        Administracja może podejmować działania mające
+        na celu ochronę serwera, jego gospodarki oraz
+        społeczności.
       </li>
 
       <li>
         Regulamin może zostać zmieniony przez administrację.
-        Zmiany obowiązują od momentu ich opublikowania.
+        Aktualna wersja regulaminu jest publikowana
+        na oficjalnej stronie serwera.
       </li>
 
     </ol>
@@ -1989,8 +1996,8 @@ footer{
     <ol>
 
       <li>
-        Gracze zobowiązani są do zachowywania kultury
-        osobistej oraz szanowania innych użytkowników.
+        Każdy gracz zobowiązany jest do zachowania
+        kultury osobistej oraz szacunku wobec innych osób.
       </li>
 
       <li>
@@ -1999,18 +2006,19 @@ footer{
       </li>
 
       <li>
-        Zabrania się prowadzenia konfliktów, które
-        negatywnie wpływają na rozgrywkę innych osób.
+        Zabrania się rozpoczynania lub podtrzymywania
+        konfliktów, które negatywnie wpływają na
+        rozgrywkę innych użytkowników.
       </li>
 
       <li>
         Zabrania się podszywania pod innych graczy,
-        administrację lub osoby związane z serwerem.
+        członków administracji lub właścicieli serwera.
       </li>
 
       <li>
-        Zabrania się reklamowania innych serwerów,
-        stron, usług oraz społeczności bez zgody administracji.
+        Zabrania się celowego wprowadzania innych graczy
+        w błąd w celu uzyskania korzyści.
       </li>
 
       <li>
@@ -2045,28 +2053,30 @@ footer{
     <ol>
 
       <li>
-        Czat serwera powinien być wykorzystywany
-        zgodnie z jego przeznaczeniem.
-      </li>
-
-      <li>
         Zabrania się spamowania oraz wielokrotnego
-        wysyłania tych samych lub podobnych wiadomości.
+        wysyłania takich samych lub podobnych wiadomości.
       </li>
 
       <li>
         Zabrania się floodowania, nadmiernego używania
-        wielkich liter oraz celowego utrudniania komunikacji.
+        wielkich liter oraz celowego utrudniania
+        komunikacji.
       </li>
 
       <li>
-        Zabrania się reklamowania innych serwerów
-        Minecraft, Discordów oraz stron internetowych
-        bez zgody administracji.
+        Zabrania się reklamowania innych serwerów,
+        projektów Minecraft, Discordów, stron internetowych
+        oraz usług bez zgody administracji.
       </li>
 
       <li>
-        Zabrania się publikowania danych prywatnych
+        Zabrania się wysyłania podejrzanych linków
+        lub treści mogących zagrozić bezpieczeństwu
+        innych użytkowników.
+      </li>
+
+      <li>
+        Zabrania się publikowania prywatnych danych
         innych osób bez ich zgody.
       </li>
 
@@ -2113,25 +2123,25 @@ footer{
 
       <li>
         Zabrania się wykorzystywania mechanik gry
-        w sposób prowadzący do uzyskania nieuczciwej
-        przewagi, jeżeli administracja uzna je za nadużycie.
+        w sposób zapewniający nieuczciwą przewagę
+        nad innymi graczami.
       </li>
 
       <li>
-        Zabrania się niszczenia rozgrywki innych graczy
-        poprzez celowe blokowanie dostępu do ich baz,
-        farm lub innych miejsc.
+        Zabrania się celowego powodowania lagów,
+        nadmiernego obciążania serwera oraz tworzenia
+        konstrukcji mających na celu destabilizację serwera.
       </li>
 
       <li>
-        Zabrania się tworzenia konstrukcji oraz mechanizmów,
-        które mogą powodować znaczne obciążenie serwera.
+        Administracja może ograniczyć działanie farm,
+        mechanizmów Redstone lub innych konstrukcji,
+        jeżeli powodują one znaczne obciążenie serwera.
       </li>
 
       <li>
-        Automatyzacja rozgrywki może być ograniczona,
-        jeżeli powoduje nadmierne obciążenie serwera
-        lub negatywnie wpływa na innych graczy.
+        Zabrania się wykorzystywania AFK oraz automatyzacji
+        w sposób powodujący nadmierne obciążenie serwera.
       </li>
 
     </ol>
@@ -2153,7 +2163,7 @@ footer{
       </span>
 
       <h3>
-        Budowanie i działki
+        Budowanie i ochrona terenu
       </h3>
 
     </div>
@@ -2161,31 +2171,35 @@ footer{
     <ol>
 
       <li>
-        Gracz odpowiada za swoje budowle oraz teren,
-        na którym prowadzi działalność.
+        Gracz odpowiada za swoje budowle, przedmioty
+        oraz teren wykorzystywany podczas rozgrywki.
       </li>
 
       <li>
-        Zabrania się niszczenia cudzych budowli bez zgody
-        właściciela lub wyraźnego zezwolenia administracji.
+        Zabrania się niszczenia cudzych budowli,
+        farm, magazynów oraz innych konstrukcji
+        bez zgody właściciela.
       </li>
 
       <li>
-        Zabrania się celowego zaśmiecania świata
-        oraz tworzenia nieestetycznych konstrukcji,
-        jeżeli administracja uzna je za rażące.
+        Zabrania się zajmowania terenu w sposób celowo
+        uniemożliwiający innym graczom normalną rozgrywkę.
       </li>
 
       <li>
-        Zabrania się zajmowania terenu należącego
-        do innego gracza w celu uniemożliwienia mu
-        dalszej rozbudowy.
+        Zabrania się budowania bezpośrednio przy cudzych
+        bazach w celu utrudniania ich rozbudowy lub użytkowania.
       </li>
 
       <li>
-        W przypadku sporów dotyczących terenu decyzję
-        podejmuje administracja na podstawie dostępnych
-        dowodów.
+        Zabrania się celowego zaśmiecania świata oraz
+        pozostawiania dużych, niepotrzebnych konstrukcji
+        mogących negatywnie wpływać na wygląd mapy.
+      </li>
+
+      <li>
+        W przypadku sporu dotyczącego terenu administracja
+        może podjąć decyzję o jego rozwiązaniu.
       </li>
 
     </ol>
@@ -2207,7 +2221,7 @@ footer{
       </span>
 
       <h3>
-        PvP i kradzież
+        PvP, kradzież i griefing
       </h3>
 
     </div>
@@ -2215,31 +2229,42 @@ footer{
     <ol>
 
       <li>
-        PvP jest dozwolone wyłącznie w miejscach
-        i sytuacjach, w których zezwalają na to zasady
-        serwera.
+        PvP jest dozwolone na terenie serwera,
+        z wyjątkiem miejsc oznaczonych jako strefy bezpieczne
+        lub objętych innymi ograniczeniami.
       </li>
 
       <li>
-        Zabrania się wykorzystywania błędów lub mechanik
-        serwera do zabijania graczy w sposób nieuczciwy.
+        Zabrania się wykorzystywania teleportów, stref
+        ochronnych, błędów oraz innych mechanik serwera
+        do uzyskania nieuczciwej przewagi podczas PvP.
+      </li>
+
+      <li>
+        Zabrania się celowego zabijania graczy poprzez
+        wykorzystywanie błędów lub nieprawidłowego działania
+        pluginów.
       </li>
 
       <li>
         Zabrania się kradzieży przedmiotów należących
-        do innych graczy, jeżeli regulamin serwera
-        lub dana strefa tego zabrania.
+        do innych graczy, jeżeli znajdują się one na
+        chronionym lub prywatnym terenie.
       </li>
 
       <li>
-        Zabrania się celowego niszczenia przedmiotów,
-        skrzyń, farm oraz innych zasobów należących
-        do innych użytkowników.
+        Zabrania się niszczenia cudzych baz, skrzyń,
+        farm, maszyn oraz innych konstrukcji.
+      </li>
+
+      <li>
+        Zabrania się celowego podpalania, zalewania,
+        wysadzania lub innego niszczenia cudzych budowli.
       </li>
 
       <li>
         Zabrania się zastawiania pułapek poza miejscami,
-        w których ich używanie jest dozwolone.
+        w których ich używanie zostało wyraźnie dozwolone.
       </li>
 
     </ol>
@@ -2261,7 +2286,7 @@ footer{
       </span>
 
       <h3>
-        Oszustwa i niedozwolone oprogramowanie
+        Cheaty i niedozwolone oprogramowanie
       </h3>
 
     </div>
@@ -2270,31 +2295,31 @@ footer{
 
       <li>
         Zabrania się korzystania z cheatów, hacków,
-        niedozwolonych klientów oraz innych modyfikacji
-        zapewniających nieuczciwą przewagę.
+        niedozwolonych klientów oraz modyfikacji zapewniających
+        nieuczciwą przewagę.
       </li>
 
       <li>
         Zabrania się korzystania z niedozwolonych makr,
-        skryptów oraz automatyzacji wpływających
-        na rozgrywkę.
+        skryptów oraz programów automatyzujących rozgrywkę.
       </li>
 
       <li>
-        Zabrania się wykorzystywania botów do automatycznego
+        Zabrania się używania botów do automatycznego
         zdobywania przedmiotów, pieniędzy, doświadczenia
         lub innych korzyści.
       </li>
 
       <li>
-        Zabrania się udostępniania, sprzedawania lub
-        rozpowszechniania cheatów przeznaczonych
-        do wykorzystania na serwerze.
+        Zabrania się udostępniania lub rozpowszechniania
+        niedozwolonego oprogramowania przeznaczonego
+        do wykorzystania przeciwko serwerowi.
       </li>
 
       <li>
-        Dozwolone modyfikacje nie mogą zapewniać
-        nieuczciwej przewagi nad innymi graczami.
+        Dozwolone modyfikacje klienta nie mogą zapewniać
+        przewagi niedostępnej dla standardowego klienta
+        Minecraft.
       </li>
 
     </ol>
@@ -2316,7 +2341,7 @@ footer{
       </span>
 
       <h3>
-        Błędy i wykorzystywanie bugów
+        Błędy, bugi i exploity
       </h3>
 
     </div>
@@ -2325,24 +2350,31 @@ footer{
 
       <li>
         Zabrania się celowego wykorzystywania błędów
-        serwera, pluginów, mapy oraz innych elementów
+        serwera, pluginów, mapy lub innych elementów
         infrastruktury TorqueHub.
       </li>
 
       <li>
-        Znaleziony błąd należy zgłosić administracji
-        poprzez odpowiedni kanał kontaktowy.
+        Każdy znaleziony błąd powinien zostać zgłoszony
+        administracji poprzez oficjalny kanał kontaktowy.
       </li>
 
       <li>
-        Zabrania się rozpowszechniania informacji
-        umożliwiających innym osobom wykorzystanie
-        poważnego błędu przed jego naprawieniem.
+        Zabrania się rozpowszechniania informacji pozwalających
+        innym osobom na wykorzystywanie poważnego błędu
+        przed jego naprawieniem.
       </li>
 
       <li>
-        Przedmioty, pieniądze lub inne korzyści uzyskane
-        poprzez wykorzystanie błędu mogą zostać usunięte.
+        Przedmioty, pieniądze, doświadczenie lub inne korzyści
+        uzyskane poprzez wykorzystanie błędu mogą zostać
+        usunięte przez administrację.
+      </li>
+
+      <li>
+        Administracja może cofnąć skutki wykorzystania
+        błędu, włącznie z przywróceniem wcześniejszego stanu
+        rozgrywki.
       </li>
 
     </ol>
@@ -2377,9 +2409,9 @@ footer{
       </li>
 
       <li>
-        Decyzje administracji mogą być podejmowane
-        na podstawie dostępnych dowodów, logów oraz
-        innych informacji związanych z rozgrywką.
+        Administracja może korzystać z logów serwera,
+        systemów zabezpieczeń oraz innych dostępnych
+        informacji podczas wyjaśniania naruszeń.
       </li>
 
       <li>
@@ -2388,13 +2420,19 @@ footer{
 
       <li>
         Zabrania się podszywania pod członków administracji
-        oraz wykorzystywania ich nazw lub rang w celu
-        wprowadzenia innych graczy w błąd.
+        oraz wykorzystywania ich nazw, rang lub oznaczeń
+        w celu wprowadzenia innych graczy w błąd.
       </li>
 
       <li>
         Członkowie administracji również są zobowiązani
         do przestrzegania zasad serwera.
+      </li>
+
+      <li>
+        W sprawach wymagających indywidualnej oceny
+        administracja może podjąć decyzję na podstawie
+        dostępnych dowodów i okoliczności zdarzenia.
       </li>
 
     </ol>
@@ -2424,14 +2462,14 @@ footer{
     <ol>
 
       <li>
-        Za złamanie regulaminu mogą zostać nałożone
-        odpowiednie kary.
+        Za złamanie regulaminu administracja może nałożyć
+        odpowiednią karę.
       </li>
 
       <li>
         W zależności od rodzaju oraz powagi przewinienia
-        administracja może zastosować między innymi:
-        
+        mogą zostać zastosowane między innymi:
+
         <ul class="sub">
 
           <li>
@@ -2443,16 +2481,20 @@ footer{
           </li>
 
           <li>
-            czasową blokadę konta,
+            czasowa blokada konta,
           </li>
 
           <li>
-            permanentną blokadę konta,
+            permanentna blokada konta,
           </li>
 
           <li>
-            usunięcie zdobytych nieuczciwie przedmiotów
+            usunięcie nieuczciwie zdobytych przedmiotów
             lub środków,
+          </li>
+
+          <li>
+            cofnięcie skutków wykorzystania błędu,
           </li>
 
           <li>
@@ -2469,9 +2511,13 @@ footer{
       </li>
 
       <li>
-        Administracja może zastosować surowszą karę
-        w przypadku powtarzających się lub szczególnie
-        poważnych naruszeń regulaminu.
+        Powtarzające się naruszenia regulaminu mogą skutkować
+        zastosowaniem surowszej kary.
+      </li>
+
+      <li>
+        Administracja może nałożyć karę również na gracza,
+        który świadomie pomagał innej osobie w łamaniu regulaminu.
       </li>
 
     </ol>
@@ -2506,18 +2552,23 @@ footer{
       </li>
 
       <li>
-        Odwołania należy składać poprzez oficjalny
+        Odwołanie należy złożyć poprzez oficjalny
         kanał kontaktowy serwera.
       </li>
 
       <li>
-        Odwołanie powinno zawierać informacje pozwalające
-        administracji na identyfikację sprawy.
+        Odwołanie powinno zawierać nick gracza,
+        rodzaj kary oraz opis sytuacji.
+      </li>
+
+      <li>
+        W przypadku posiadania dowodów należy dołączyć
+        je do odwołania.
       </li>
 
       <li>
         Zabrania się składania fałszywych lub celowo
-        wprowadzających w błąd informacji podczas odwołania.
+        wprowadzających w błąd informacji.
       </li>
 
       <li>
@@ -2552,8 +2603,8 @@ footer{
     <ol>
 
       <li>
-        Regulamin ma na celu zapewnienie wszystkim
-        graczom bezpiecznej, uczciwej i przyjemnej rozgrywki.
+        Regulamin ma na celu zapewnienie wszystkim graczom
+        uczciwej, bezpiecznej i przyjemnej rozgrywki.
       </li>
 
       <li>
@@ -2562,10 +2613,9 @@ footer{
       </li>
 
       <li>
-        Administracja zastrzega sobie prawo do podjęcia
-        działań w przypadku zachowań, które nie zostały
-        bezpośrednio opisane w regulaminie, ale negatywnie
-        wpływają na serwer lub jego społeczność.
+        Administracja może podjąć działania wobec zachowań,
+        które nie zostały bezpośrednio opisane w regulaminie,
+        ale negatywnie wpływają na serwer lub jego społeczność.
       </li>
 
       <li>
@@ -2573,11 +2623,1084 @@ footer{
         regulaminu oznacza akceptację jego aktualnej wersji.
       </li>
 
+      <li>
+        Aktualna wersja regulaminu jest dostępna
+        na oficjalnej stronie TorqueHub.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+</div>
+
+
+</main>
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <span>
+      © 2026 TorqueHub.pl
+    </span>
+
+    <span>
+      •
+    </span>
+
+    <a
+      href="#"
+      onclick="showPage('rules');return false;"
+    >
+      Regulamin
+    </a>
+
+    <span>
+      •
+    </span>
+
+    <a
+      href="https://dc.torquehub.eu/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Discord
+    </a>
+
+  </div>
+
+  <div class="fine">
+    TorqueHub nie jest powiązany z firmą Mojang Studios ani Microsoft.
+  </div>
+
+</footer>
+<!-- ==========================================
+     REGULAMIN
+========================================== -->
+
+<div
+  class="page"
+  id="page-rules"
+>
+
+  <div class="rules-head">
+
+    <div
+      class="kicker"
+      style="margin-bottom:10px;"
+    >
+      Regulamin serwera Minecraft
+    </div>
+
+    <h2>
+      Regulamin — TorqueHub
+    </h2>
+
+    <p>
+      Dołączenie do serwera <b>TorqueHub</b> oznacza
+      akceptację niniejszego regulaminu oraz zobowiązanie
+      do jego przestrzegania.
+    </p>
+
+  </div>
+
+
+  <!-- SPIS TREŚCI -->
+
+  <nav class="rules-toc">
+
+    <a href="#p1">
+      §1 Postanowienia ogólne
+    </a>
+
+    <a href="#p2">
+      §2 Zachowanie graczy
+    </a>
+
+    <a href="#p3">
+      §3 Czat i komunikacja
+    </a>
+
+    <a href="#p4">
+      §4 Rozgrywka
+    </a>
+
+    <a href="#p5">
+      §5 Budowanie i ochrona
+    </a>
+
+    <a href="#p6">
+      §6 PvP, kradzież i griefing
+    </a>
+
+    <a href="#p7">
+      §7 Cheaty i niedozwolone mody
+    </a>
+
+    <a href="#p8">
+      §8 Bugowanie i exploity
+    </a>
+
+    <a href="#p9">
+      §9 Handel i ekonomia
+    </a>
+
+    <a href="#p10">
+      §10 Administracja
+    </a>
+
+    <a href="#p11">
+      §11 Kary
+    </a>
+
+    <a href="#p12">
+      §12 Odwołania
+    </a>
+
+    <a href="#p13">
+      §13 Postanowienia końcowe
+    </a>
+
+  </nav>
+
+
+  <!-- ==========================================
+       §1
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p1"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §1
+      </span>
+
+      <h3>
+        Postanowienia ogólne
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Regulamin obowiązuje wszystkich użytkowników
+        serwera <b>TorqueHub</b>, niezależnie od posiadanej
+        rangi, czasu gry lub statusu.
+      </li>
+
+      <li>
+        Każdy gracz jest zobowiązany do zapoznania się
+        z regulaminem przed rozpoczęciem rozgrywki.
+      </li>
+
+      <li>
+        Nieznajomość regulaminu nie zwalnia z obowiązku
+        jego przestrzegania.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania luk w regulaminie
+        w celu obchodzenia jego zasad.
+      </li>
+
+      <li>
+        Każdy gracz ponosi odpowiedzialność za działania
+        wykonywane z jego konta.
+      </li>
+
+      <li>
+        Zabrania się udostępniania konta innym osobom,
+        jeżeli prowadzi to do naruszenia zasad serwera
+        lub utrudnia administracji ustalenie sprawcy.
+      </li>
+
+      <li>
+        Administracja ma prawo podejmować działania
+        konieczne do zapewnienia bezpieczeństwa,
+        stabilności oraz prawidłowego działania serwera.
+      </li>
+
+      <li>
+        Regulamin może zostać zmieniony przez administrację.
+        Zmiany obowiązują od momentu ich opublikowania.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §2
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p2"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §2
+      </span>
+
+      <h3>
+        Zachowanie graczy
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Gracze zobowiązani są do zachowania kultury
+        osobistej oraz szacunku wobec innych użytkowników.
+      </li>
+
+      <li>
+        Zabrania się obrażania, wyzywania, poniżania,
+        nękania oraz celowego prowokowania innych graczy.
+      </li>
+
+      <li>
+        Zabrania się celowego rozpoczynania lub eskalowania
+        konfliktów, które negatywnie wpływają na rozgrywkę.
+      </li>
+
+      <li>
+        Zabrania się podszywania pod innych graczy,
+        członków administracji lub właścicieli serwera.
+      </li>
+
+      <li>
+        Zabrania się celowego wprowadzania innych graczy
+        w błąd w celu uzyskania korzyści.
+      </li>
+
+      <li>
+        Zabrania się reklamowania innych serwerów,
+        projektów, stron internetowych lub społeczności
+        bez zgody administracji.
+      </li>
+
+      <li>
+        Zabrania się publikowania treści niezgodnych
+        z obowiązującym prawem lub zasadami serwera.
+      </li>
+
+      <li>
+        Zabrania się celowego uprzykrzania gry innym
+        użytkownikom.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §3
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p3"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §3
+      </span>
+
+      <h3>
+        Czat i komunikacja
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Czat serwera powinien być wykorzystywany
+        zgodnie z jego przeznaczeniem.
+      </li>
+
+      <li>
+        Zabrania się spamowania oraz wielokrotnego
+        wysyłania takich samych lub podobnych wiadomości.
+      </li>
+
+      <li>
+        Zabrania się floodowania oraz celowego
+        utrudniania komunikacji na czacie.
+      </li>
+
+      <li>
+        Nadmierne używanie wielkich liter może być
+        uznane za spam lub flood.
+      </li>
+
+      <li>
+        Zabrania się reklamowania innych serwerów Minecraft,
+        Discordów oraz stron bez zgody administracji.
+      </li>
+
+      <li>
+        Zabrania się publikowania danych prywatnych
+        innych osób bez ich zgody.
+      </li>
+
+      <li>
+        Zabrania się celowego omijania filtrów czatu
+        w celu publikowania niedozwolonych treści.
+      </li>
+
+      <li>
+        Zabrania się celowego wykorzystywania systemów
+        komunikacji do zakłócania działania serwera.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §4
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p4"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §4
+      </span>
+
+      <h3>
+        Rozgrywka
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Gracz zobowiązany jest do prowadzenia uczciwej
+        rozgrywki oraz przestrzegania zasad serwera.
+      </li>
+
+      <li>
+        Zabrania się celowego utrudniania rozgrywki
+        innym użytkownikom.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania mechanik gry
+        w sposób prowadzący do uzyskania nieuczciwej
+        przewagi.
+      </li>
+
+      <li>
+        Zabrania się tworzenia konstrukcji lub mechanizmów,
+        które powodują nadmierne obciążenie serwera.
+      </li>
+
+      <li>
+        Farmy automatyczne oraz redstone mogą zostać
+        ograniczone przez administrację, jeżeli powodują
+        problemy z wydajnością serwera.
+      </li>
+
+      <li>
+        Zabrania się celowego generowania nadmiernej
+        liczby mobów, przedmiotów lub innych obiektów
+        w celu obciążenia serwera.
+      </li>
+
+      <li>
+        Zabrania się celowego utrudniania działania
+        serwera innym użytkownikom.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §5
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p5"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §5
+      </span>
+
+      <h3>
+        Budowanie i ochrona
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Gracz odpowiada za swoje budowle oraz teren,
+        na którym prowadzi działalność.
+      </li>
+
+      <li>
+        Zabrania się niszczenia cudzych budowli bez
+        zgody właściciela lub administracji.
+      </li>
+
+      <li>
+        Zabrania się celowego niszczenia terenu
+        należącego do innych graczy.
+      </li>
+
+      <li>
+        Zabrania się zajmowania terenu bezpośrednio
+        należącego do innego gracza w celu uniemożliwienia
+        mu rozbudowy.
+      </li>
+
+      <li>
+        Zabrania się budowania w bezpośrednim sąsiedztwie
+        cudzej bazy w celu celowego utrudniania rozgrywki.
+      </li>
+
+      <li>
+        Zabrania się tworzenia konstrukcji mających
+        na celu prowokowanie lub przeszkadzanie innym graczom.
+      </li>
+
+      <li>
+        W przypadku sporów dotyczących terenu decyzję
+        podejmuje administracja na podstawie dostępnych
+        dowodów oraz logów serwera.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §6
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p6"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §6
+      </span>
+
+      <h3>
+        PvP, kradzież i griefing
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        PvP jest dozwolone zgodnie z zasadami danego
+        trybu, świata lub wyznaczonej strefy.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania błędów serwera
+        lub niedozwolonych mechanik do uzyskania przewagi
+        podczas PvP.
+      </li>
+
+      <li>
+        Zabrania się niszczenia cudzych budowli,
+        farm oraz innych konstrukcji bez zgody właściciela.
+      </li>
+
+      <li>
+        Kradzież przedmiotów z cudzych skrzyń, magazynów
+        lub baz jest zabroniona, jeżeli dana strefa lub
+        zasady serwera tego zabraniają.
+      </li>
+
+      <li>
+        Zabrania się celowego niszczenia lub ukrywania
+        przedmiotów należących do innych graczy.
+      </li>
+
+      <li>
+        Pułapki mogą być stosowane wyłącznie w miejscach,
+        w których ich używanie jest dozwolone.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania PvP jako sposobu
+        na celowe nękanie lub uporczywe prześladowanie
+        konkretnego gracza.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §7
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p7"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §7
+      </span>
+
+      <h3>
+        Cheaty i niedozwolone mody
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Zabrania się korzystania z cheatów, hacków,
+        niedozwolonych klientów oraz innych programów
+        zapewniających nieuczciwą przewagę.
+      </li>
+
+      <li>
+        Zabrania się korzystania z niedozwolonych makr,
+        skryptów oraz automatyzacji wpływających
+        na rozgrywkę.
+      </li>
+
+      <li>
+        Zabrania się korzystania z botów służących
+        do automatycznego zdobywania przedmiotów,
+        pieniędzy, doświadczenia lub innych korzyści.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania oprogramowania
+        umożliwiającego automatyczne wykonywanie
+        czynności w grze.
+      </li>
+
+      <li>
+        Zabrania się udostępniania lub rozpowszechniania
+        cheatów przeznaczonych do wykorzystania
+        przeciwko serwerowi TorqueHub.
+      </li>
+
+      <li>
+        Dozwolone modyfikacje nie mogą zapewniać
+        nieuczciwej przewagi nad innymi graczami.
+      </li>
+
+      <li>
+        W przypadku wątpliwości dotyczących konkretnego
+        moda gracz powinien skontaktować się z administracją
+        przed jego użyciem.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §8
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p8"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §8
+      </span>
+
+      <h3>
+        Bugowanie i exploity
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Zabrania się celowego wykorzystywania błędów
+        serwera, pluginów, mapy lub innych elementów
+        infrastruktury TorqueHub.
+      </li>
+
+      <li>
+        Każdy znaleziony błąd powinien zostać zgłoszony
+        administracji.
+      </li>
+
+      <li>
+        Zabrania się rozpowszechniania informacji
+        umożliwiających wykorzystanie poważnego błędu
+        przed jego naprawieniem.
+      </li>
+
+      <li>
+        Przedmioty, pieniądze, doświadczenie lub inne
+        korzyści uzyskane poprzez wykorzystanie błędu
+        mogą zostać usunięte.
+      </li>
+
+      <li>
+        Administracja może cofnąć skutki wykorzystania
+        błędu, w tym zmienić stan konta, ekwipunku
+        lub świata.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §9
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p9"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §9
+      </span>
+
+      <h3>
+        Handel i ekonomia
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Handel pomiędzy graczami powinien odbywać się
+        zgodnie z zasadami serwera.
+      </li>
+
+      <li>
+        Gracze odpowiadają za przeprowadzane przez siebie
+        transakcje oraz poprawność ustalonych warunków.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania błędów ekonomii
+        w celu uzyskania nieuczciwych korzyści.
+      </li>
+
+      <li>
+        Zabrania się celowego manipulowania systemem
+        ekonomii poprzez wykorzystywanie bugów,
+        błędów pluginów lub innych luk.
+      </li>
+
+      <li>
+        Środki lub przedmioty zdobyte w wyniku
+        nieuczciwego działania mogą zostać usunięte.
+      </li>
+
+      <li>
+        Administracja może cofnąć nieuczciwe transakcje,
+        jeżeli posiada odpowiednie dowody.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §10
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p10"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §10
+      </span>
+
+      <h3>
+        Administracja
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Administracja odpowiada za utrzymanie porządku,
+        bezpieczeństwa oraz prawidłowego działania serwera.
+      </li>
+
+      <li>
+        Administracja może analizować logi serwera
+        oraz inne informacje niezbędne do wykrywania
+        naruszeń regulaminu.
+      </li>
+
+      <li>
+        Decyzje administracji mogą być podejmowane
+        na podstawie logów, nagrań, zgłoszeń oraz
+        innych dostępnych dowodów.
+      </li>
+
+      <li>
+        Zabrania się celowego utrudniania pracy
+        administracji.
+      </li>
+
+      <li>
+        Zabrania się podszywania pod członków administracji.
+      </li>
+
+      <li>
+        Zabrania się wykorzystywania nazwy, rangi lub
+        innych oznaczeń administracji w celu wprowadzenia
+        graczy w błąd.
+      </li>
+
+      <li>
+        Członkowie administracji również są zobowiązani
+        do przestrzegania zasad serwera.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §11
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p11"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §11
+      </span>
+
+      <h3>
+        Kary
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Za złamanie regulaminu gracz może otrzymać
+        odpowiednią karę.
+      </li>
+
+      <li>
+        Rodzaj kary zależy od rodzaju, częstotliwości
+        oraz powagi przewinienia.
+      </li>
+
+      <li>
+        Administracja może zastosować między innymi:
+
+        <ul class="sub">
+
+          <li>
+            ostrzeżenie,
+          </li>
+
+          <li>
+            wyciszenie,
+          </li>
+
+          <li>
+            kick,
+          </li>
+
+          <li>
+            czasową blokadę konta,
+          </li>
+
+          <li>
+            permanentną blokadę konta,
+          </li>
+
+          <li>
+            reset przedmiotów lub środków zdobytych
+            nieuczciwie,
+          </li>
+
+          <li>
+            cofnięcie skutków wykorzystania błędu,
+          </li>
+
+          <li>
+            inne środki konieczne do ochrony serwera.
+          </li>
+
+        </ul>
+
+      </li>
+
+      <li>
+        Wysokość kary może zależeć od historii przewinień,
+        szkodliwości działania oraz okoliczności zdarzenia.
+      </li>
+
+      <li>
+        Powtarzające się łamanie regulaminu może skutkować
+        zwiększeniem wymiaru kary.
+      </li>
+
+      <li>
+        W przypadku szczególnie poważnych naruszeń
+        administracja może zastosować permanentną blokadę
+        bez wcześniejszego ostrzeżenia.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §12
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p12"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §12
+      </span>
+
+      <h3>
+        Odwołania od kar
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Gracz ma prawo odwołać się od nałożonej kary,
+        jeżeli uważa ją za niesłuszną.
+      </li>
+
+      <li>
+        Odwołanie należy złożyć poprzez oficjalny
+        kanał kontaktowy serwera lub Discord.
+      </li>
+
+      <li>
+        Odwołanie powinno zawierać nick gracza,
+        rodzaj kary oraz możliwie dokładny opis sytuacji.
+      </li>
+
+      <li>
+        W przypadku posiadania dowodów mogą one zostać
+        dołączone do odwołania.
+      </li>
+
+      <li>
+        Zabrania się składania fałszywych lub celowo
+        wprowadzających w błąd informacji.
+      </li>
+
+      <li>
+        Ostateczną decyzję w sprawie odwołania podejmuje
+        administracja serwera.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <!-- ==========================================
+       §13
+  ========================================== -->
+
+  <div
+    class="rule-sec"
+    id="p13"
+  >
+
+    <div class="rh">
+
+      <span class="tag">
+        §13
+      </span>
+
+      <h3>
+        Postanowienia końcowe
+      </h3>
+
+    </div>
+
+    <ol>
+
+      <li>
+        Regulamin ma na celu zapewnienie wszystkim
+        użytkownikom bezpiecznej, uczciwej i przyjemnej
+        rozgrywki.
+      </li>
+
+      <li>
+        W sprawach nieuregulowanych niniejszym regulaminem
+        decyzję podejmuje administracja.
+      </li>
+
+      <li>
+        Administracja może podjąć działania również
+        w przypadku zachowań, które nie zostały
+        bezpośrednio opisane w regulaminie, ale wyraźnie
+        szkodzą serwerowi lub jego społeczności.
+      </li>
+
+      <li>
+        Regulamin obowiązuje na serwerze Minecraft,
+        oficjalnym Discordzie oraz w innych oficjalnych
+        miejscach związanych z TorqueHub, jeżeli zasady
+        danego miejsca nie stanowią inaczej.
+      </li>
+
+      <li>
+        Korzystanie z serwera po wejściu w życie zmian
+        regulaminu oznacza akceptację jego aktualnej wersji.
+      </li>
+
+      <li>
+        Ostateczna interpretacja regulaminu należy
+        do administracji TorqueHub.
+      </li>
+
     </ol>
 
   </div>
 
 </div>
+
+
+</main>
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <span>
+      © 2026 TorqueHub
+    </span>
+
+    <span>
+      •
+    </span>
+
+    <a
+      href="#"
+      onclick="showPage('rules');return false;"
+    >
+      Regulamin
+    </a>
+
+    <span>
+      •
+    </span>
+
+    <a
+      href="https://dc.torquehub.eu/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Discord
+    </a>
+
+  </div>
+
+  <div class="fine">
+    TorqueHub.PL SMP · SurvivalSMP
+  </div>
+
+</footer>
+
+
+</div>
+
+
+<!-- ==========================================
+     PIXEL ART + JAVASCRIPT
+========================================== -->
+
+<script>
+
 
 /* ==========================================
    PIXEL ART
@@ -2593,7 +3716,8 @@ function paintGrid(el, pattern, palette){
 
     row.forEach(v => {
 
-      const i = document.createElement('i');
+      const i =
+        document.createElement('i');
 
       i.style.background =
         v === 0
